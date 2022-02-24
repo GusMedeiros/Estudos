@@ -1,0 +1,1 @@
+valortotal *= 0.9;
