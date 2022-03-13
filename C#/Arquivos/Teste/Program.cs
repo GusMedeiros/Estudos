@@ -1,0 +1,10 @@
+﻿System.Console.Write("Type in your name: ");
+string name = Console.ReadLine();
+Console.Write("Type in your date of birth: ");
+DateTime birthdate = Convert.ToDateTime(Console.ReadLine());
+DateTime now = DateTime.Now;
+int age = new DateTime(now.Subtract(birthdate).Ticks).Year;
+Console.WriteLine(age);
+Console.WriteLine($"You, {name}, are {age} years old.");
+if (age >= 21)    Console.WriteLine("The law says you're old enough to buy alcohol.");
+else Console.WriteLine("The law says you're too young to buy alcohol, sorry.");
