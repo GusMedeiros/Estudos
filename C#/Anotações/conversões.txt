@@ -1,0 +1,21 @@
+PARSE:
+todo tipo primitivo tem o método parse, que converte
+uma string para aquele tipo.
+Exemplo: int valor = int.Parse("32")
+===
+Convert:
+Convert é uma classe própria, que pode ser usada para
+converter qualquer tipo primitivo.
+Exemplo: Convert.ToInt32(37.45f)
+O convert arredonda, não simplesmente trunca.
+===
+ToString()
+A maioria dos tipos tem o método ToString, que retorna
+sua representação em string.
+
+========
+Coerção:
+usar (tipo) ao lado de uma variável ou expressão
+força a expressão a ser lida como aquele tipo.
+Exemplo:
+(char)65 == 'A'; -> true
