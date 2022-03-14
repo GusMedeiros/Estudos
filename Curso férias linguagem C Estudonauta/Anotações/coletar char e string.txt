@@ -1,0 +1,7 @@
+Coletar strings, char, etc
+
+===========================
+COLETAR CHAR:
+usa-se a função getchar(), que retorna o caractere digitado.
+===========================
+usa-se a função gets(variavel), que salva na variavel uma string

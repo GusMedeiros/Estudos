@@ -1,0 +1,31 @@
+todos esses comandos são da lib
+<string.h>
+ou seja, #include <string.h>
+================
+STRCPY
+strcpy(variavel_alvo, string);
+salva a string na variável alvo
+
+===========
+STRLEN
+strlen(string);
+retorna a qtd de caracteres da string
+
+===============
+STRCMP
+strcmp(string1,string2);
+compara duas strings. retorna um valor
+esse valor será positivo se string 1 for maior,
+0 se for igual,
+negativo se for menor
+===============
+STRCAT
+strcat(string1,string2);
+
+retorna uma string = as duas strings concatenadas.
+==================
+STRUP E STRLWR
+strupr(variavel com string) -> string maiuscula
+strlwr(variavel com string) -> string minuscula
+
+ALTERA A STRING/VARIAVEL ORIGINAL!!!

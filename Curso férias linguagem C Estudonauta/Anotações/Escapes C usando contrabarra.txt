@@ -1,0 +1,9 @@
+\n -> nova linha
+\t -> tabulação
+\b -> backspace
+\r -> retorno
+\\ -> barra
+\" -> aspas
+\? -> interrogação
+\a ou \7 -> beep
+%% -> porcentagem

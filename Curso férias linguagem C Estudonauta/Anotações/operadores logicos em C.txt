@@ -1,0 +1,11 @@
+OPERADORES LÓGICOS
+
+OR = ||
+AND = &&
+NOT = !
+===================
+ORDEM DE PRECEDENCIA:
+PRIORIDADE DECRESCENTE
+ \/  !
+ \/  &&
+ \/  ||

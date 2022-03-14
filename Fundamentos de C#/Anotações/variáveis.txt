@@ -1,0 +1,23 @@
+INTEIROS:
+short  -  (16 bits)
+ushort -  (16 bits, sem sinal)
+int    -  (32 bits)
+uint   -  (32 bits, sem sinal)
+long   -  (64 bits)
+ulong  -  (64 bits, sem sinal)
+
+==================================
+REAIS:
+float    - (32 bits)  - usa sufixo F/f
+double   - (64 bits)  - não precisa de sufixo
+decimal  - (128 bits) - usa sufixo M/m
+
+==================================
+bool -> true/false
+
+
+byte -> conteúdo de um byte, representado por um inteiro sem sinal de 1 byte/8bits, ou seja, de 0 a 255.
+sbyte -> conteúdo de um byte, representado por um inteiro com sinal de 1 byte/8bits, ou seja, de -128 a 127.
+
+string -> string usual, conjunto de caracteres.
+char -> caractere único. Assim como em c, usa aspas simples.

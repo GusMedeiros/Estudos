@@ -1,0 +1,12 @@
+%d - int
+%f - float
+%c - char
+%s - string
+=============
+menos usados:
+%e - notação
+%hd - short int
+%ld - long int
+%hu - unsigned short int
+%u - unsigned
+%lu - unsigned long
