@@ -1,5 +1,12 @@
+INTEIROS:
+short  -  (16 bits)
+ushort -  (16 bits, sem sinal)
+int    -  (32 bits)
+uint   -  (32 bits, sem sinal)
+long   -  (64 bits)
+ulong  -  (64 bits, sem sinal)
 
-
+==================================
 bool -> true/false (lowercase, diferente de python)
 char -> caractere único, assim como em c, usa aspas simples.
 byte -> inteiro sem sinal de 1 byte/8bits, ou seja, de 0 a 255.
