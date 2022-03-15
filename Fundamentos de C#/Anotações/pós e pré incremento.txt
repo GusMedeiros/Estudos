@@ -1,0 +1,16 @@
+incrementos e decrementos podem ocorrer antes ou depois
+da expressão ser realizada.
+Quando o operador está antes da variável, ocorre
+antes da expressão. Quando está depois, ocorre depois.
+Ou seja, para a variável x, x++ incrementará x em 1 ao
+fim da expressão, enquanto --x decrementará x em 1 antes da expressão.
+
+Por exemplo, se você faz
+
+int i = 0;
+Console.WriteLine(i++);
+Console.WriteLine(i);
+O primeiro output será 0, o segundo 1, pois, apesar de i++ estar incrementando i em 1,
+isso só é realizado ao final da expressão, ou seja, após escrever no console i, que é 0.
+
+O mesmo vale para decrementos.

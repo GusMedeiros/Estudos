@@ -1,0 +1,8 @@
+myFloatVariable.ToString("0.00"); //2dp Number
+
+myFloatVariable.ToString("n2"); // 2dp Number
+
+myFloatVariable.ToString("c2"); // 2dp currency
+
+"N2" and "C2" will add thousand separators while
+"0.00" won't.
