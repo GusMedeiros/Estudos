@@ -1,0 +1,54 @@
+Stack: 
+É a memória que começa no endereço de valor mais alto e vai decrescendo a cada ocupação, sendo "empilhada". Fica somente abaixo
+de kernel e coisas relacionadas ao sistema operacional. Assim como em 
+uma pilha, só é possível tirar o último elemento colocado. Ao se declarar um value type, é alocado espaço na stack. 
+Quando um escopo é encerrado, a stack é resetada para antes dele ser iniciado, liberando rápida e facilmente toda
+a memória stack utilizada na execução daquele bloco. Na realidade, a memória que estava sendo utilizada não é apagada, mas,
+como o ponteiro PC volta a apontar para onde estava antes de adentrar o escopo, a memória utilizada será potencialmente 
+sobrescrita, caso venha a ser necessária. Ou seja: para efeitos práticos, é apagada, but not really.
+Como a stack é completamente sequencial, não é possível alocar uma variável de tamanho máximo mutável, já que correríamos o 
+risco de sobescrever outros elementos que tivessem sido alocados após a declaração dessa variável.
+Programas são "territoriais" com sua stack. Seria um desastre se programas pudessem armazenar dados na stack de outros
+programas, o que geraria corrupção e perda de dados constante. Por isso, cada programa tem sua stack, não sendo possível mudar
+seu tamanho inicialmente alocado.
+
+
+Value types:
+Tem tamanho fixo e são armazenados exclusivamente na stack.
+Quando são passados, são duplicados. Isso pode ser problemático, pois ocorre desperdício de espaço ou de processamento.
+Porém, em muitos casos é desejável uma duplicata que, ao ser alterada, não altere o valor original, então também é uma vantagem.
+
+OBS: value types é diferente de value. Todo espaço de memória contem um valor, nem que seja zero, mesmo que esse espaço seja
+um espaço de referência. Value types se referem a tipos "direto ao ponto", como inteiros, cujos valores que serão utilizados
+se encontram neles mesmos.
+
+Vantagens stack/value types:
+rápida, não altera valor original, limpeza automática.
+
+Desvantagens:
+limitada/territorial, possível stack overflow.
+
+Heap:
+É a memória que começa no endereço de menor valor e vai crescendo até a fronteira com os endereços da stack. Ao se declarar um
+ponteiro ou reference types, o valor "de verdade" deles é armazenado na heap. A heap é considerada uma memória "global", já
+que, por não ser sequencial, não tem escopo, ou tem escopo global. Ela é potencialmente desordenada, o que impede o mecanismo
+de ponteiro que acontece na stack, em que pode-se apagar de uma vez só todo o escopo utilizado. Em muitos casos, isso é uma
+vantagens, em muitos outros é uma desvantagem. Uma das grandes vantagens é a possibilidade de comportar variáveis de tamanho
+mutável, já que, por não funcionar como a stack, que cegamente ocupa o próximo endereço, não corre risco de sobescrever o
+próximo endereço erroneamente.
+
+Reference types:
+São compostos por duas partes: Valor e referência. A referência é armazenada na stack, e nada mais é do que o endereço para o
+valor em si. Já o valor é o valor mesmo, que fica contido no espaço de memória correspondente ao endereço citado.
+São muito úteis para variáveis que podem ter grandes tamanhos, como arrays. Imagine um array com 1 milhão de números inteiros.
+Demoraria bastante para duplicá-lo, coisa que aconteceria toda vez que fosse passado para uma função, custando muita memória
+e tempo de processamento. Com um reference type, basta passar o endereço do valor original, que será utilizado em sua raiz.
+É preciso tomar cuidado pois, diferente da stack, as variáveis não são apagadas automaticamente por padrão, então o programador
+precisa manualmente liberar o espaço que alocaram. Isso é uma exceção apenas nas linguagens que possuem garbage collector, que
+periodicamente checam se há variáveis não mais utilizadas para "jogar fora", apesar de custar tempo de processamento.
+
+Vantagens:
+pode ser variável, é global, economiza espaço comparado aos value types, uso prático, não-territorial.
+
+Desvantagens:
+é consideravelmente mais lenta que a stack, gerenciamento complicado, altera valor original.
