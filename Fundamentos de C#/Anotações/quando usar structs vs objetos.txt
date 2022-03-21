@@ -1,0 +1,11 @@
+https://stackoverflow.com/questions/85553/when-should-i-use-a-struct-instead-of-a-class
+
+Bill Wagner has a chapter about this in his book "effective c#" 
+(http://www.amazon.com/Effective-Specific-Ways-Improve-Your/dp/0321245660). 
+He concludes by using the following principle:
+
+1. Is the main responsability of the type data storage?
+2. Is its public interface defined entirely by properties that access or modify its data members?
+3. Are you sure your type will never have subclasses?
+4. Are you sure your type will never be treated polymorphically?
+If you answer 'yes' to all 4 questions: use a struct. Otherwise, use a class.
