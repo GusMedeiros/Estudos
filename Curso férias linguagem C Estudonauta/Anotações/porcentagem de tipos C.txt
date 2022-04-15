@@ -10,3 +10,6 @@ menos usados:
 %hu - unsigned short int
 %u - unsigned
 %lu - unsigned long
+%lf - long float (double)
+%Lf - long double
+%x - hexadecimal

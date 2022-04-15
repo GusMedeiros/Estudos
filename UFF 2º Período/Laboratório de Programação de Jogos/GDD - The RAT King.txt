@@ -1,0 +1,155 @@
+1. Nome do projeto: The RAT King
+
+2. Highconcept:
+O jogador seria o rei rato, personagem que será adorado ou odiado
+pelo seu povo, dependendo do sucesso de sua gestão e defesa em um reino medieval 2D.
+A ideia é ser um jogo de gráfico amigável, um pouco "fofinho", adicionando
+carisma e leveza ao The RAT King.
+3. Gameplay e Enredo:
+
+O jogador construirá e governará o Reino dos Ratos como o rei rato, tendo como 
+objetivo fazer o reino prosperar na economia e na defesa/guerra, ao mesmo tempo
+que se defende politicamente de adversários políticos, revoltas e insatisfações.
+As interações do jogador com o jogo se dão por 2 principais facetas:
+
+A faceta city building:
+    O jogador terá de posicionar ruas e estruturas para montar a infraestrutura de
+    seu reino, que estará localizado no mapa padrão, com determinados recursos naturais. 
+    Essa faceta será fortemente inspirada no jogo Kingdoms and Castles,
+    em que há vários tipos de estrutura, como:
+    Castelo:
+            Grátis, estrutura inicial onde o rei vive. Se o castelo cair, o jogador é derrotado.
+            É uma estrutura um tanto quanto resistente, cujo ataque equivale a duas torres de vigília.
+            No castelo ficam os conselheiros do rei, que dão sugestões ao jogador e que possibilitam
+            liberar certas coisas, como construções defensivas depois do reino estar minimamente
+            estabelecido.
+    Habitação:
+        Onde a população geral mora. Haveriam dois ou três tipos de casa, variando
+        em eficiência de espaço, custo de construção, quantidade de pessoas, etc.
+    Produção de comida:
+        Fazendas, principalmente. A comida que sai da fazenda já é comestível, porém
+        é ineficiente, precisando-se de uma quantidade maior para satisfazer o mesmo
+        número de pessoas do que comidas preparadas.
+    Distribuição e refinamento de comida:
+        Refinamento:
+        Padarias, tavernas, etc, que, por um pequeno custo de outros recursos, como carvão ou
+        dinheiro, aproveitam muito melhor a comida. Para incentivar o jogador a gastar esses
+        recursos, é necessário que a produtividade seja grande o suficiente para compensar o gasto.
+        Distribuição:
+        Esse tipo de construção tem um 'range' de acesso a fazendas muito maior do que
+        casas têm. Em outras palavras, haverão situações em que, para uma mesma posição, uma casa estaria
+        longe demais para se abastecer da fazenda, enquanto uma padaria não. 
+
+        Essas características fazem com que não só o The RAT King seja mais interessante do ponto de vista
+        de construção de cidades, já que é um problema de infraestrutura a ser planejado, como também
+        faz com que existam áreas rurais separadas das urbanas, dando um aspecto melhor à cidade. Isso
+        acontecerá porque o jogador sentirá que a melhor opção é deixar estruturas rurais, que tenderão 
+        a ter ranges grandes, como fazendas, longe, e estruturas urbanas, como casas e postos de trabalho
+        perto umas das outras.
+
+        Indústria:
+        Serão construções de extração dos recursos que o mapa provém, como:
+        Campos de coleta de madeira, minas de ferro, de carvão e de pedra.
+        
+        Logística:
+        Construções de transporte e prevenção/remediação de problemas, como incêndios.
+        Depósito - será um prédio capaz de armazenar os recursos naturais da indústria.
+        Silo - o equivalente ao depósito, porém destinado a recursos de comida.
+        Poços d'água - cidadãos com acesso fácil à água ficam mais felizes. Além disso,
+            lugares perto de poços terão menos chance de incêndio, além de poderem ser
+            usados pelos cidadãos para apagar o fogo.
+        Cemetério - cidadãos e guerreiros mortos geram infelicidade ao redor. Ao serem
+            levados para um cemetério, essa infelicidade é eliminada.
+        
+        Estruturas bélicas:
+        Campo de recrutamento:
+            Aqui, cidadãos poderão ser transformados em guerreiros e arqueiros.
+        Altar de herói rato:
+            Poderá ser pago um valor alto em ouro para gerar um herói rato, uma unidade especial
+            mais forte do que guerreiros normais.
+        Torres de vigília:
+            São torres que atacam inimigos que chegarem perto o suficiente.
+        Muralhas e portões:
+            paredes que servirão de barreira aos invasores, mais difíceis de quebrar
+            que estruturas normais.
+
+A faceta card-swiping:
+    Inspirado por jogos como King, de tempos em tempos o jogador será abordado por uma situação
+    dentro de um repositório de possíveis situações, e será forçado a decidir entre (geralmente) duas escolhas,
+    que terão consequências explícitas e não explícitas, mas geralmente possíveis de se supor.
+    Haverão situações periódicas, como escolhas diplomáticas e políticas; situações aleatórias, como catástrofes;
+    situações com pré requisitos, como revoltas, que terão o pré requisito de uma satisfação abaixo de um certo valor. 
+
+    Exemplo:
+        Catástrofe! Uma enchente danificou a casa de 20 moradores, que ficaram desabrigados. O que você fará?
+        Opção 1: Financiar reparos das casas
+            Consequências explícitas (contadas ao jogador):
+                Custo: X de ouro por casa
+            Consequências implícitas (não contadas ao jogador):
+                Aumento leve na satisfação do governo
+
+        Opção 2: Deixe que se virem!
+            Consequências explicitas (contadas ao jogador):
+                Nenhuma
+            Consequências implícitas (não conatadas ao jogador):
+                Queda moderada na satisfação com o governo
+                Moradores desabrigados deixam o reino
+
+4. Interface do usuário
+    A interface de interação se dará, principalmente, pelo mouse. O jogador poderá clicar em elementos
+    do reino e da interface gráfica.
+    
+    A interface gráfica será similar à de Warcraft 3 e Cities Skylines. Ela terá principalmente a
+    visão do reino, sendo sobreposta por:
+    Monitores de recursos:
+        Haverão indicadores mostrando quanto de cada recurso o jogador tem. São eles:
+        Comida, madeira, ferro, carvão, pedra.
+    Monitores de governo:
+        Haverão indicadores mostrando questões governamentais para o jogador, como:
+        Satisfação do povo, dinheiro, diplomacia
+    Monitores bélicos:
+        Indicadores de questões bélicas ao jogador, como:
+        Quantidade de guerreiros, torres, se há muralhas danificadas...
+    Interface de construção:
+        Opções clicáveis de estruturas que o jogador pode posicionar, comandando que
+        seus construtores as façam.
+    Interface de destacamentos:
+        Haverão botões no estilo checklist para se ter uma visão destacada de certos elementos, como:
+        Destacar estruturas bélicas [x]
+        Destacar estruturas de comida [ ]
+        Destacar casas insatisfeitas [ ]
+        
+        Ao serem marcados, o elemento escolhido será destacado com uma cor chamativa, que se destaque
+        em meio ao estilo de arte de The RAT King.
+
+5. Áudio e música:
+    Áudio:
+    The RAT King terá áudios para algumas ações, como um barulho de impacto ao se colocar construções,
+    barulhos de notificações para as notificações que aparecerem no The RAT King, pequenos sons quando o jogador
+    passar o mouse em cima de determinadas opções, barulhos de flechas para torres de vigilia, etc.
+
+    Música:
+    O The RAT King terá uma música base, que se encaixe em tema medieval, e músicas diferentes para determinadas
+    situações, como invasões, que terão uma música mais intensa.
+
+6. Arte conceito e referências
+    O The RAT King tem como filosofia a arte amigável 2d, isso é, uma arte suave e levemente "fofinha". O objetivo
+    é que a arte desperte sentimentos de leveza casual. Os personagens serão ratos, e algumas coisas girarão
+    em volta disso, como coisas relacionadas a esteriótipos de rato (ex: queijo como indicador de comida).
+    A ideia é que esses ratos sejam fofinhos e cartunescos, como os do jogo transformice.
+    O mesmo vale para as construções, que também devem seguir essa filosofia amigável e leve.
+
+    The RAT King tem diversas inspirações/referências: 
+        Kingdoms and Castles - inspiração principalmente na gameplay, mas também em arte, que é bem leve também.
+        King - se encaixa muito bem a mecânica de escolhas por cartas em um jogo de reino.
+        Warcraft 3 - Hud, mecânicas de controle de cidade e extração de recursos.
+        Cities: Skylines - Hud, mecânicas de controle de cidade, extração de recursos e problemas de
+            infraestrutura, como construções que reduzem a chance de incêndio.
+        transformice - principalmente a temática do rato 'fofinho'.
+        Kitaria fables - a ideia de um reino de animais 'fofinhos'
+        tchutchu - ratinha intolerantes
+    
+7. Ideias adicionais e observações
+    Nunca programei nada relacionado a jogos, então não sei o quão difícil seria fazer esse jogo. Fica complicado
+    listar os elementos do jogo sem saber o que é viável de implementar, mas, de qualquer maneira, serve como
+    ideia base.

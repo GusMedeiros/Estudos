@@ -1,0 +1,33 @@
+Elementos de um bom jogo:
+
+Preparação: Valorizar / punir escolhas
+Quanto mais rápido a pessoa entender que tipo de escolhas são certas e erradas, mais instigante e divertido o jogo se torna.
+
+Sentido de Espaço: entendimento do universo espacial
+A "física" do jogo, no sentido de como as coisas acontecem. O espaço é um elemento central em game design, tão central que,
+muitas vezes, não conseguimos explicar as regras do jogo sem mostrar o "tabuleiro". Tente explicar as regras do xadrez sem mostrar o
+tabuleiro de xadrez, verá que é muito complicado.
+
+Mecânica sólida: conjunto elegante de regras.
+Regras sólídas e consistentes, com poucas exceções. 
+
+Desafios: operam as regras
+Todo jogo tem que ter desafios claros. Tem que estar muito claro qual é o objetivo da proposta que você está trazendo.
+
+Capacidades e progresso:
+teoria do flow. se vocÊ tem muita habilidade e o jogo é fácil, o jogo se torna tedioso. Se o jogo é muito complicado e você não estiver
+à altura, você cai numa área de estresse, em que a experiência de jogo não é agradável. Um jogo ótimo deve mirar no meio termo entre esses
+dois extremos, que é quando é constantemente exigido do jogador que supere um desafio difícil o suficiente para ser recompensante, mas
+não tanto a ponto de ser puramente estressante.
+
+--------------------
+Um sistema de recompensa e punição
+
+Deve haver um problema central a ser resolvido
+ex: futebol gira ao redor de fazer gols. ganha quem fizer mais gols, logo, apesar do
+objetivo ser ganhar a partida, o objetivo real é fazer mais gols que o adversário.
+
+Não gostamos de mudanças:
+as regras tem que se manter consistentes. Não é essencialmente errado um jogo com diversas mecânicas, porém fazer funcionar sem ser algo
+que incomoda não é uma tarefa trivial. Um exemplo bem feito disso é o jogo it takes two, que o tempo todo muda de mecânica. Um que fez isso mal,
+por melhor que o jogo seja, é Mario, em que muitas pessoas desgostaram da fase da água por ser uma mecânica diferente e considerada pior

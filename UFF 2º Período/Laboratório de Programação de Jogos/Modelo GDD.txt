@@ -1,0 +1,31 @@
+GDD
+
+1. Nome do projeto
+
+2. Highconcept
+
+Descreva em apenas um parágrafo as principais características do jogo, incluindo aspectos
+diferenciais e inovadores do projeto.
+
+3. Gameplay e Enredo
+
+Descreva todos os elementos do jogo e sua interação com o jogador.
+Fluxo de jogo, fases, personagens, enredo, storyboards e cenário, são todos
+elementos dessa seção. Se necessário utilize imagens, tabelas e fluxogramas.
+
+é necessário explicar a mecânica e o storyboard
+
+4. Interface do usuário
+basicamente composta de 2 elementos: como o usuário interage com o jogo (ex: usar a sequencia de teclas wasd),
+e a interface de hud (como os elementos do jogo serão mostrados ao usuário).
+
+5. Áudio e música
+Descreva caracteristicas de audio e musica do jogo
+
+6. Arte conceito e referências
+Inclua arte conceito ou referência de outros jogos, que ilustram algum aspecto
+específico ou amplo deste jogo.
+
+7. Ideias adicionais e observações
+Inclua aqui funcionalidades extras que podem ou não ser incluídas no jogo,
+ou outras observações quanto ao projeto.
