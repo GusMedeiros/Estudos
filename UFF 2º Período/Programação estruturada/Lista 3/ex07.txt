@@ -1,0 +1,24 @@
+Resposta:
+Como arrays são, na maioria das ocasiões, equivalentes a ponteiros, veti e pti são do mesmo tipo: ponteiros para inteiros.
+Dessa forma, é válido fazer "pti = veti;", pois são completamente compatíveis.
+Tendo isso em mente, vamos checar as alternativas:
+
+Alternativa A)
+*pti é o mesmo que pti[0], já que armazena o endereço do primeiro elemento de veti. É, de fato, 10.
+
+Alternativa B)
+*(pti+2) soma 2 ao endereço de veti[0] e acessa. Ou seja, é o mesmo que veti[2] ou pti[2]. É, de fato, 2.
+
+Alternativa C)
+pti[4] é o mesmo que veti[4]. Ambos somam 4 a &veti[0] e acessam o resultado. Portanto, é, de fato, 3.
+
+Alternativa D) *Incorreta
+pti[1] pega o endereço de veti[0], soma 1 e o acessa. Ou seja, é o elemento de índice 1 do array veti.
+Esse elemento corresponde ao valor 7, portanto, diferente de 10. Alternativa incorreta!
+
+Alternativa E)
+Como dito antes, um array é, na maoria das ocasiões, considerado um ponteiro.
+Portanto, veti nada mais é do que &veti[0]. Se somarmos 3 a &veti[0], teremos &veti[3].
+Dessa forma, veti+3 = &veti[3]
+Colocar um asterisco na frente de uma variável que armazena um endereço faz com que esse endereço
+seja acessado. Ou seja, *(veti+3) retornará o conteúdo de veti[3], que é, de fato, 6.

@@ -1,0 +1,41 @@
+Existe, de certa forma, um tipo "endereço" em C, que só o sistema operacional consegue criar.
+Na prática, é simplesmente um número. Quando fazemos *ponteiro, estamos dizendo para o compilador
+acessar o endereço contido em ponteiro, em vez do valor do ponteiro em si.
+Porém, como não existe algo como address ponteiro = 1234, pois, como afirmado acima, só o S.O pode administrar
+endereços, o que precisamos fazer é passar um endereço que já existe através do &.
+
+Fica algo assim:
+
+int valor_apontado = 365; // declaramos um inteiro qualquer
+int *ponteiro = &valor_apontado; // de certa forma, é como se estivéssemos declarando um tipo endereço.
+
+/* O tipo de verdade da variável de nome ponteiro é o asterísco, que é como se fosse um tipo endereço.
+Estamos dizendo ao compilador que ponteiro será uma variável que armazenará um valor do tipo endereço.
+Porém, também precisamos informar ao compilador de que maneira o valor deverá ser interpretado quando for
+chamado através do ponteiro. Como o valor original é int, também deverá ser int.
+Por fim, fazemos a nossa variável do tipo ponteiro/endereço receber o endereço da variável valor_apontado, que
+é obtível através do &valor_apontado. */
+
+Agora, para usarmos nosso ponteiro:
+
+Lembre-se que dentro da variável ponteiro tem simplesmente um valor binário. 
+Você pode muito bem fazer algo como
+printf("%d", ponteiro);
+
+e estará simplesmente mandando o compilador interpretar o conteúdo de ponteiro como um inteiro e printá-lo.
+O resultado é que será printado o endereço da variável valor_apontado, pois esse é o conteúdo de ponteiro.
+
+Entretanto, o que queremos é que o compilador entenda que o conteúdo de ponteiro é um endereço a ser acessado.
+Para isso, basta usarmos o asterísco. Toda vez que colocarmos um asterisco atrás de uma variável, o valor retornado
+será o conteúdo do endereço contido nessa variável. Para evitar dar problemas com o S.O, o compilador normalmente
+permite apenas que tipos endereço recebam o operador *. 
+Portanto, se fizermos
+printf("%d", *ponteiro);
+será printado o conteúdo de valor_apontado, pois mandamos o compilador acessar o endereço contido em ponteiro, que é
+o endereço de valor_apontado, e printá-lo como um inteiro.
+
+VETORES:
+&vetor[0] e vetor são a mesma coisa. Portanto, ao passar um vetor como referência/ponteiro, pode-se passar ou o vetor
+em si, ou o endereço do primeiro elemento.
+
+funcao(int vetor) é equivalente a funcao(int &vetor[0])

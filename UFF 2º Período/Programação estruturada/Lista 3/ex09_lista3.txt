@@ -1,0 +1,13 @@
+9. Assumindo que pulo[] é um vetor do tipo int, quais das seguintes expressões referenciam o valor
+do terceiro elemento da matriz?
+A) *(pulo + 2) - Correta!
+Soma 2 ao endereço de pulo[0] e o acessa, ou seja, é equivalente a pulo[2], que é o terceiro elemento. Correta!
+b) *(pulo + 4) 
+Soma 4 ao endereço de pulo[0] e o acessa, ou seja, é equivalente a pulo[4], que é o quinto elemento. Errada"
+c) pulo + 4 
+Soma 4 ao endereço de pulo[0], o que, além de não corresponder ao endereço de pulo[2], não o acessa.
+d) pulo + 2
+Soma 2 ao endereço de pulo[0], correspondendo ao endereço de pulo[2] corretamente. Porém não o acessa, já que não usa *.
+
+Resposta:
+Alternativa a.

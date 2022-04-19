@@ -1,0 +1,28 @@
+Considerando "resultado" = "output", temos:
+printf("contador/valor/valor/endereco/endereco"); -> contador/valor/valor/endereco/endereco
+repetirá 5 vezes, com i de 0 até 4 (inclusive):
+
+printf("\ni = %d",i); -> informará qual iteração de i estamos. 
+
+printf("vet[%d] = %.1f", i, vet[i]) -> informará o índice do vetor acessado e seu conteúdo, com 1 casa de precisão.
+printf("*(f + %d) = %.1f",i, *(f+i)); -> informará o endereço acessado e o seu conteúdo, com 1 casa de precisão.
+uma vez que f contem &vet[0], f+i será vet[i], ou seja, o valor printado aqui será o mesmo valor printado na linha anterior.
+
+printf("&vet[%d] = %X",i, &vet[i]); -> informará o endereço do elemento de índice i do vetor vet, ou &vet[i].
+printf("(f + %d) = %X",i, f+i); -> informará o endereço do conteúdo de f + i.
+f = &vet[0], f+i é o mesmo que &vet[0] + i, que é o mesmo que &vet[i]. Portanto, será o mesmo valor printado na linha anterior.
+
+Dessa forma, o output será algo como:
+contador/valor/valor/endereco/endereco
+i = 0/1/2/3/4
+vet[0/1/2/3/4] = 1.1/2.2/3.3/4.4/5.5
+*(f + 0/1/2/3/4) = 1.1/2.2/3.3/4.4/5.5
+&vet[0/1/2/3/4] = endereço 0/1/2/3/4
+(f + 0/1/2/3/4) = endereço 0/1/2/3/4
+
+Pulei linhas para facilitar a leitura, porém no programa não são puladas linhas.
+As barras simbolizam a mudança de uma iteração para a outra.
+
+O ponto central do exercício é entender que:
+1. *(f+i) é o mesmo que f[i], que é o mesmo que vet[i]
+2. &vet[i] é o mesmo que &f[i], que é o mesmo que f + i.
