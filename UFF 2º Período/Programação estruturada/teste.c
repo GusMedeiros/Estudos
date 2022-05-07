@@ -1,6 +1,7 @@
 #include <stdio.h>
 void main()
 {
-    int a = 1, b = 5;
-    printf("%d", a == 1 && b == 3);
+    int a = 1, b = 140;
+    char c[] = "teste";
+    printf("%d", *(&a+1));
 }

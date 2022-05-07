@@ -1,0 +1,8 @@
+a ideia da alocação dinâmica é ter um tamanho variável, que é "setado" em tempo de execução.
+
+SEMPRE USAR IF VETOR = NULL exit(1)
+SEMPRE DAR FREE
+
+Variáveis locais
+é uma variável da pilha, que pertence exclusivamente ao escopo local.
+

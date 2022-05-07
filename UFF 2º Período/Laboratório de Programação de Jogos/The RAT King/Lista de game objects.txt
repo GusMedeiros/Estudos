@@ -1,0 +1,12 @@
+Game objects planejados (sujeito a mudança):
+Castelo - estrutura de administração do reino. Dá poder de defesa
+Casa  - aumenta a quantidade máxima de habitantes.
+Coletora de recursos - aumenta o recurso escolhido (ex: pedra) periodicamente
+Refinadores/Distribuidores de comida (taverna, padaria, etc)
+Armazem de recursos - aumenta a qtd maxima de recursos
+Poço d'água - diminui a chance de estruturas proximas pegarem fogo
+Cemetério - evita que mortos se acumulem
+Campo de recrutamento - gera soldados, que dão tanto poder de ataque quanto de defesa.
+Altar do herói rato - gera um soldado especial chamado herói rato
+Torre de vigia - aumenta o poder de defesa
+Muralhas e portões - aumentam poder de defesa. Só podem ser colocados na borda do mapa.

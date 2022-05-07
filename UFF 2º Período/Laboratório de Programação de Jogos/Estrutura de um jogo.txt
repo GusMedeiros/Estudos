@@ -1,0 +1,38 @@
+Todo jogo tem um game loop, que pode ser considerado um loop infinito enquanto o programa rodar.
+
+A estrutura padrão de um game loop é:
+
+1. Input
+2. Update
+3. Desenhar
+
+Como é o game loop que desenha a tela, ou frame, desejamos que o game loop rode
+o mais rápido possível. Abaixo de 30 Hz, se torna muito notável a latência de processamento.
+Acima de 30, a melhora tende a diminuir, apesar de ainda ser perceptível.
+Em geral, se tem como alvo 60 Hz, pois, além de ser a frequência da maioria dos monitores,
+melhorias se tornam pouco perceptíveis, ou seja, desperdiça-se processamento por algo que não tem efeito.
+
+Para um computador potente, isso não faz muita diferença. Entretanto, ao se programar para mobile ou
+computadores fracos, faz.
+
+Percepção de latência em partes da visão:
+
+Temos, na nossa retina, dois tipos de célula: cones e bastonetes. Cones tem uma visão mais focada, e uma
+maior percepção de cores. Os bastonetes tem mais ênfase na percepção de luminosidade, sendo melhor pra ver no escuro.
+Bastonetes tem uma velocidade muito mais rápida de percepção que os cones. Por isso, temos reflexos muito melhores para
+coisas na visão periférica (onde temos mais bastonetes) do que no centro (onde temos mais cones). Porém, a visão é muito
+mais focada, nos permitindo "enxergar de verdade" no no centro do olho, devido à densidade de cones maior.
+Por isso, por ser mais rápida, a visão periférica é mais sensível à latência do que a visão focal. 
+Isso faz pouquíssima diferença para monitores, mas para realidades virtuais pode causar enjôo e náuseas. Por isso,
+ambientes V.R precisam de mais FPS.
+
+Game Objects:
+São, de fato, objetos da programação orientada a objetos.
+
+Assets:
+São os valores. Pode ser uma imagem, um número, etc. 
+
+Em python, int é uma classe. 5 é um valor/asset. Uma variável do tipo int que contém o asset 5 é um objeto.
+
+Precisaremos de uma estrutura de dados que lide com todos os game objects. Em jogos em geral, se utiliza o "grafo de cena",
+que envolve uma hierarquia. Não utilizaremos isso na disciplina.

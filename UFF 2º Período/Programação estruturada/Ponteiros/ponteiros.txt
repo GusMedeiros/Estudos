@@ -1,7 +1,7 @@
 Existe, de certa forma, um tipo "endereço" em C, que só o sistema operacional consegue criar.
 Na prática, é simplesmente um número. Quando fazemos *ponteiro, estamos dizendo para o compilador
 acessar o endereço contido em ponteiro, em vez do valor do ponteiro em si.
-Porém, como não existe algo como address ponteiro = 1234, pois, como afirmado acima, só o S.O pode administrar
+Porém, como não existe algo como address meuponteiro = 1234, pois, como afirmado acima, só o S.O pode administrar
 endereços, o que precisamos fazer é passar um endereço que já existe através do &.
 
 Fica algo assim:
