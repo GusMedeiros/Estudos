@@ -1,7 +1,7 @@
 from PPlay.sprite import *
 from PPlay.window import *
 from PPlay.gameimage import *
-from random import random
+from random import random, randint
 
 def checar_pause(jan, tecl):
     return tecl.key_pressed('esc')
@@ -26,12 +26,16 @@ teclado = Window.get_keyboard()
 # passo do jogo (variaveis que servem para aumentar todas as velocidades de uma vez caso desejado)
 playerspeedpace = 150
 ballspeedpace = 75
+botspeedpace = 200
+minbotspeedpace = 175
+maxbotspeedpace = 225
+
 # inicializando bola
 bola = Sprite('bola.jpg')
 x_orig_bola = janela.width / 2 - bola.width / 2
 y_orig_bola = janela.height / 2 - bola.height / 2
 bola.set_position(x_orig_bola, y_orig_bola)
-velX = (3 if random() < 0.5 else -3)
+velX = (4.5 if random() < 0.5 else -4.5)
 velY = (3 if random() < 0.5 else -3)
 # Inicializando jogadores
 jogadorsegurando = False
@@ -39,7 +43,6 @@ jogadorsegurando = False
 jogador1 = Sprite('barra.jpg')
 pontosjogador1 = 0
 jogador1.set_position(jogador1.width, janela.height / 2 - jogador1.height/2)
-botspeedpace = 180
 # Jogador 2
 jogador2 = Sprite('barra.jpg')
 pontosjogador2 = 0
@@ -81,10 +84,10 @@ while True:
     # chute:
     if (teclado.key_pressed("space") or bola.x < janela.width/2) and jogadorsegurando:
         if bola.x > janela.width / 2:  # se a bola estiver pro lado direito
-            velX = -3
+            velX = -4.5
             bola.x = jogador2.x - bola.width
         else:  # se a bola estiver pro lado esquerdo ( com o bot )
-            velX = 3
+            velX = 4.5
             bola.x = jogador1.x + jogador1.width
         velY = (3 if random() < 0.5 else -3)
         jogadorsegurando = False
@@ -94,6 +97,7 @@ while True:
     if bola.x + bola.width <= 0:  # Colisão parede esquerda
         bola.set_position(jogador2.x - jogador2.width/2 - bola.width/2, jogador2.y + jogador2.height / 2 - bola.height/2)
         jogadorsegurando = True
+        botspeedpace = randint(minbotspeedpace, maxbotspeedpace)
         pontosjogador2 += 1
         velX = 0
         velY = 0
@@ -107,6 +111,7 @@ while True:
         velY *= -1
         bola.y += velY * pace * ballspeedpace  # desfaz o movimento que causou a colisão
     if bola.collided(jogador1) and not jogadorsegurando:  # colisao com jogador 1
+        botspeedpace = randint(minbotspeedpace, maxbotspeedpace)
         if bola.x - velX * pace * ballspeedpace < jogador1.x + jogador1.width:  # se bateu nas pontas da barra
             velY *= -1
             bola.y = jogador1.y - bola.height if bola.y < jogador1.y + jogador1.height / 2 else jogador1.y + jogador1.height
@@ -122,7 +127,6 @@ while True:
         else:
             velX *= -1
             bola.x += velX * pace * ballspeedpace
-
     # desenhar
     fundo.draw()
     janela.draw_text(f"{pontosjogador1}", janela.width / 6, janela.height / 10, int(janela.height / 8),

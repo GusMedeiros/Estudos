@@ -1,0 +1,5 @@
+union
+localizaçao de memoria compartilhada por diferentes variáveis, que podem ser de tipos diferentes
+
+uniões usadas para armazenar valores heterogêneos em um mesmo espaço de memória
+

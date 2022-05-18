@@ -3,6 +3,7 @@ from PPlay.window import *
 from PPlay.gameimage import *
 from random import random
 
+
 def checar_pause(jan, tecl):
     return tecl.key_pressed('esc')
 
@@ -56,12 +57,12 @@ while True:
     pace = janela.delta_time()
     # inputs do player
     if jogador2.y > 0:
-        if teclado.key_pressed("w"):
+        if bola.y + bola.height/2 < jogador2.y + jogador2.height/2:
             jogador2.y -= 4 * pace * playerspeedpace
             if jogadorsegurando and bola.x > janela.width/2:
                 bola.y -= 4 * pace * playerspeedpace
     if jogador2.y < janela.height - jogador2.height:
-        if teclado.key_pressed("s"):
+        if bola.y - bola.height/2 > jogador2.y + jogador2.height/2:
             jogador2.y += 4 * pace * playerspeedpace
             if jogadorsegurando and bola.x > janela.width/2:
                 bola.y += 4 * pace * playerspeedpace
@@ -79,7 +80,7 @@ while True:
             if jogadorsegurando and bola.x < janela.width/2:
                 bola.y += 1 * pace * botspeedpace
     # chute:
-    if (teclado.key_pressed("space") or bola.x < janela.width/2) and jogadorsegurando:
+    if jogadorsegurando:
         if bola.x > janela.width / 2:  # se a bola estiver pro lado direito
             velX = -3
             bola.x = jogador2.x - bola.width
