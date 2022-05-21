@@ -21,7 +21,7 @@ def pause(jan, tecl, delay_t):
 
 # inicializando janela
 janela = Window(910, 512)
-fundo = GameImage('espaco.jpg')
+fundo = GameImage('../espaco.jpg')
 teclado = Window.get_keyboard()
 relogio = 0
 relogiomax = 0
@@ -31,14 +31,14 @@ ballspeedpace = 75
 predictmultiplier = 2
 botspeedpace = 180
 # inicializando bola
-bola = Sprite('bola.jpg')
+bola = Sprite('../bola.jpg')
 x_orig_bola = janela.width / 2 - bola.width / 2
 y_orig_bola = janela.height / 2 - bola.height / 2
 bola.set_position(x_orig_bola, y_orig_bola)
 velX = (3 if random() < 0.5 else -3)
 velY = (3 if random() < 0.5 else -3)
 # inicializando bola invisível de previsão
-bola_previsao = Sprite('bola.jpg')
+bola_previsao = Sprite('../bola.jpg')
 bola_previsao.set_position(bola.x, bola.y)
 velX_previsao = velX
 velY_previsao = velY
@@ -48,12 +48,12 @@ comecarprevisao = False
 # Inicializando jogadores
 jogadorsegurando = False
 # Jogador 1
-jogador1 = Sprite('barra.jpg')
+jogador1 = Sprite('../barra.jpg')
 pontosjogador1 = 0
 jogador1.set_position(jogador1.width, janela.height / 2 - jogador1.height/2)
 irpracima = random() > 0.5
 # Jogador 2
-jogador2 = Sprite('barra.jpg')
+jogador2 = Sprite('../barra.jpg')
 pontosjogador2 = 0
 jogador2.set_position(janela.width - 2 * jogador2.width , janela.height/2 - jogador2.height/2)
 # Mantendo o jogo despausado

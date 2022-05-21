@@ -9,7 +9,7 @@ def checar_pause(jan, tecl):
 
 
 def pause(jan, tecl, delay_t):
-    animacao = Sprite('bola.jpg', 2)
+    animacao = Sprite('../bola.jpg', 2)
     animacao.set_total_duration(5)
     animacao.y = jan.height/2
     animacao.x = jan.width/2
@@ -59,10 +59,10 @@ bloqueia_esc = False
 janela = Window(910, 512)
 delay = 16
 teclado = janela.get_keyboard()
-fundo = GameImage("espaco.jpg")
-jogador1 = Sprite("barra.jpg", 1)
-jogador2 = Sprite("barra.jpg", 1)
-bola = Sprite("bola.jpg", 1)
+fundo = GameImage("../espaco.jpg")
+jogador1 = Sprite("../barra.jpg", 1)
+jogador2 = Sprite("../barra.jpg", 1)
+bola = Sprite("../bola.jpg", 1)
 
 # setando origem da bola no centro
 bola.x_orig = janela.width/2 - bola.width/2

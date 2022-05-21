@@ -3,6 +3,7 @@ from PPlay.window import *
 from PPlay.gameimage import *
 from random import random
 
+
 def checar_pause(jan, tecl):
     return tecl.key_pressed('esc')
 
@@ -21,13 +22,13 @@ def pause(jan, tecl, delay_t):
 
 # inicializando janela
 janela = Window(910, 512)
-fundo = GameImage('espaco.jpg')
+fundo = GameImage('../espaco.jpg')
 teclado = Window.get_keyboard()
 # passo do jogo (variaveis que servem para aumentar todas as velocidades de uma vez caso desejado)
 playerspeedpace = 150
 ballspeedpace = 75
 # inicializando bola
-bola = Sprite('bola.jpg')
+bola = Sprite('../bola.jpg')
 x_orig_bola = janela.width / 2 - bola.width / 2
 y_orig_bola = janela.height / 2 - bola.height / 2
 bola.set_position(x_orig_bola, y_orig_bola)
@@ -35,14 +36,15 @@ velX = (3 if random() < 0.5 else -3)
 velY = (3 if random() < 0.5 else -3)
 # Inicializando jogadores
 jogadorsegurando = False
-# Jogador 1
-jogador1 = Sprite('barra.jpg')
+# Jogador 1 (BOT)
+jogador1 = Sprite('../barra.jpg')
 pontosjogador1 = 0
 jogador1.set_position(jogador1.width, janela.height / 2 - jogador1.height/2)
+botspeedpace = 180
 # Jogador 2
-jogador2 = Sprite('barra.jpg')
+jogador2 = Sprite('../barra.jpg')
 pontosjogador2 = 0
-jogador2.set_position(janela.width - 2 * jogador2.width , janela.height/2 - jogador2.height/2)
+jogador2.set_position(janela.width - 2 * jogador2.width, janela.height/2 - jogador2.height/2)
 # Mantendo o jogo despausado
 bloqueia_esc = False
 # Game Loop
@@ -53,37 +55,40 @@ while True:
     bloqueia_esc = False if not teclado.key_pressed('esc') else True
     janela.update()
     pace = janela.delta_time()
-    # inputs
+    # inputs do player
     if jogador2.y > 0:
-        if teclado.key_pressed("UP"):
+        if bola.y + bola.height/2 < jogador2.y + jogador2.height/2:
             jogador2.y -= 4 * pace * playerspeedpace
             if jogadorsegurando and bola.x > janela.width/2:
                 bola.y -= 4 * pace * playerspeedpace
     if jogador2.y < janela.height - jogador2.height:
-        if teclado.key_pressed("DOWN"):
+        if bola.y - bola.height/2 > jogador2.y + jogador2.height/2:
             jogador2.y += 4 * pace * playerspeedpace
             if jogadorsegurando and bola.x > janela.width/2:
                 bola.y += 4 * pace * playerspeedpace
-    if jogador1.y > 0:
-        if teclado.key_pressed("w"):
-            jogador1.y -= 4 * pace * playerspeedpace
+    # inputs do bot
+    # BOT W:
+    if jogador1.y > 0:  # limite superior
+        if bola.y + bola.height / 2 < jogador1.y + jogador1.height/2 and bola.x + bola.width/2 < janela.width*5/6:
+            jogador1.y -= 1 * pace * botspeedpace
             if jogadorsegurando and bola.x < janela.width/2:
-                bola.y -= 4 * pace * playerspeedpace
-    if jogador1.y < janela.height - jogador2.height:
-        if teclado.key_pressed("s"):
-            jogador1.y += 4 * pace * playerspeedpace
+                bola.y -= 1 * pace * botspeedpace
+    # BOT S:
+    if jogador1.y < janela.height - jogador2.height:  # limite inferior
+        if bola.y+bola.height/2 > jogador1.y+jogador1.height/2 and bola.x + bola.width/2 < janela.width*5/6:
+            jogador1.y += 1 * pace * botspeedpace
             if jogadorsegurando and bola.x < janela.width/2:
-                bola.y += 4 * pace * playerspeedpace
-    if teclado.key_pressed("space") and jogadorsegurando:
+                bola.y += 1 * pace * botspeedpace
+    # chute:
+    if jogadorsegurando:
         if bola.x > janela.width / 2:  # se a bola estiver pro lado direito
             velX = -3
             bola.x = jogador2.x - bola.width
-        else:  # se a bola estiver pro lado esquerdo
-            velX = 3  # fazemos ela andar pra direita
+        else:  # se a bola estiver pro lado esquerdo ( com o bot )
+            velX = 3
             bola.x = jogador1.x + jogador1.width
         velY = (3 if random() < 0.5 else -3)
         jogadorsegurando = False
-
     # updates
     bola.x += velX * pace * ballspeedpace
     bola.y += velY * pace * ballspeedpace
