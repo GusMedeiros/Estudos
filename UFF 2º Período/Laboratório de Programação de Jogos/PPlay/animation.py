@@ -18,7 +18,7 @@ class Animation(gameimage.GameImage):
     computated: if the image has 100px width and total_frames = 10,
     each frame will have 10px width.
     """
-    def __init__(self, image_file, total_frames, loop=True):
+    def __init__(self, image_file: str, total_frames, loop=True):
         # Parent's constructor must be first-called
         gameimage.GameImage.__init__(self, image_file)
 

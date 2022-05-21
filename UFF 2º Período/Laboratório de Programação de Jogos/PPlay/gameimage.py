@@ -19,14 +19,17 @@ def load_image(name, colorkey=None, alpha=False):
             colorkey = image.get_at((0,0))
         image.set_colorkey(colorkey, RLEACCEL)
     return image, image.get_rect()
-        
+
+
 """GameImage is the base class to deal with images"""
+
+
 class GameImage(gameobject.GameObject):
     """
     Creates a GameImage from the specified file.
     The width and height are obtained based on the image file.
     """
-    def __init__(self, image_file):
+    def __init__(self, image_file: str):
         # Parent constructor must be called first
         gameobject.GameObject.__init__(self)
         
