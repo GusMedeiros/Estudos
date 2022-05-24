@@ -5,7 +5,7 @@ int main(){
     int i = 0, j = 0; // recomendo sempre iniciar com 0
 
     for(i = 0; i < N; i++){
-        printf("Digite um n�mero!\n");
+        printf("Digite um número!\n");
         scanf("%d", &vetOriginal[i]);
     }
     i = 0;
