@@ -1,6 +1,6 @@
 class Ranking:
     caminho_ranking = "ranking.json"
-    caminho_sprite = "Botao Grande Vazio.png"
+    caminho_sprite = "MenuInicial/Botao Grande Vazio.png"
 
     def __init__(self, janela):
         from PPlay.sprite import Sprite

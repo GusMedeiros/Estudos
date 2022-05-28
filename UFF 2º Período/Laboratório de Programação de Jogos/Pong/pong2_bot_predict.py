@@ -219,7 +219,6 @@ while True:
         velX_previsao = 0
         velY_previsao = 0
 
-
     # desenhar
     fundo.draw()
     janela.draw_text(f"{pontosjogador1}", janela.width / 6, janela.height / 10, int(janela.height / 8),
@@ -229,4 +228,4 @@ while True:
     jogador1.draw()
     jogador2.draw()
     bola.draw()
-    bola_previsao.draw()
+    # bola_previsao.draw()

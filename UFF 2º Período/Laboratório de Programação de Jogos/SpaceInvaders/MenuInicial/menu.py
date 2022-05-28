@@ -1,122 +1,137 @@
 from PPlay.sprite import Sprite
 from PPlay.gameimage import GameImage
-from ranking import Ranking
+from SpaceInvaders.ranking import Ranking
 
-def menuinicial(janela, mouse, teclado):
-    fundo = GameImage('espaco.jpg')
-    ranking = Ranking(janela)
-    # mouse
-    mouse = janela.get_mouse()
-    mousesprite = Sprite('mouse.png')
-    mousesprite.set_position(janela.width / 2 - mousesprite.width / 2, janela.height / 2 - mousesprite.height / 2)
-    mousehitbox = Sprite('1x1.png')
-    mouse.hide()
-    mb1click2 = False
-    # jogar
-    botaojogar = Sprite('Botaojogar.png', 2)
-    # ranking
-    botaoranking = Sprite('Botaoranking.png', 2)
-    # sair
-    botaosair = Sprite('Botaosair.png', 2)
-    # dificuldade
-    botaodificuldade = Sprite('Botaodificuldade.png', 2)
-    dificuldadeslista = ["Fácil", "Médio", "Difícil"]
-    dificuldadeindice = 0
-    dificuldade = dificuldadeslista[0]
-    tamanhofonte = 28
 
-    # posicoes dos botões
-    botaojogar.set_position(janela.width * 0.825 - botaojogar.width / 2, janela.height * 1 / 10)
-    botaodificuldade.set_position(botaojogar.x, botaojogar.y + botaojogar.height * 1.3)
-    botaoranking.set_position(botaojogar.x, botaodificuldade.y + botaojogar.height * 1.3)
-    botaosair.set_position(botaojogar.x, botaoranking.y + botaojogar.height * 1.3)
-    #
-    while True:
-        posicao = mouse.get_position()
-        # inputs do mouse
-        mousesprite.set_position(posicao[0], posicao[1])
-        mousehitbox.set_position(posicao[0], posicao[1])
-        mb1click = mouse.is_button_pressed(1)
-        # checar botao apertado
-        if True:  # if redundante proposital, para que dê pra colapsar todos os ifs abaixo de uma vez no pycharm:
-            # botao jogar
-            if mousehitbox.collided_perfect(botaojogar):
-                botaojogar.set_curr_frame(1)
-                if not mb1click and mb1click2:
-                    # animacaojogar()
-                    return dificuldade
-            else:
-                botaojogar.set_curr_frame(0)
-            # botao dificuldade
-            if mousehitbox.collided_perfect(botaodificuldade):
-                botaodificuldade.set_curr_frame(1)
-                if not mb1click and mb1click2:
-                    dificuldadeindice += 1
-                    dificuldade = dificuldadeslista[dificuldadeindice % 3]
-            else:
-                botaodificuldade.set_curr_frame(0)
-            # botao ranking
-            if mousehitbox.collided_perfect(botaoranking):
+class Menu:
+    caminhosprites = 'MenuInicial/'
+
+    def __init__(self, janela):
+        self.janela = janela
+        self.ranking = Ranking(janela)
+        # inputs e relacionados
+        self.mouse = janela.get_mouse()
+        self.mousesprite = Sprite(f'{self.caminhosprites}mouse.png')
+        self.mousehitbox = Sprite(f'{self.caminhosprites}/1x1.png')
+        self.teclado = janela.get_keyboard()
+        self.esc_pressed_past = self.mb1_pressed_past = False
+        self.double_esc_prevention = True
+        # botoes
+        self.botao_sair = Sprite(f'{self.caminhosprites}botaosair.png', 2)
+
+    def menuinicial(self):
+        fundo = GameImage(f'{self.caminhosprites}espaco.jpg')
+        # mouse
+        self.mousesprite.set_position(self.janela.width / 2 - self.mousesprite.width / 2,
+                                      self.janela.height / 2 - self.mousesprite.height / 2)
+        self.mouse.hide()
+        mb1click2 = False
+        # jogar
+        botaojogar = Sprite(f'{self.caminhosprites}Botaojogar.png', 2)
+        # ranking
+        botaoranking = Sprite(f'{self.caminhosprites}Botaoranking.png', 2)
+        # sair
+        botaosair = Sprite(f'{self.caminhosprites}Botaosair.png', 2)
+        # dificuldade
+        botaodificuldade = Sprite(f'{self.caminhosprites}Botaodificuldade.png', 2)
+        dificuldadeslista = ["Fácil", "Médio", "Difícil"]
+        dificuldadeindice = 0
+        dificuldade = dificuldadeslista[0]
+        tamanhofonte = 28
+
+        # posicoes dos botões
+        botaojogar.set_position(self.janela.width * 0.825 - botaojogar.width / 2, self.janela.height * 1 / 10)
+        botaodificuldade.set_position(botaojogar.x, botaojogar.y + botaojogar.height * 1.3)
+        botaoranking.set_position(botaojogar.x, botaodificuldade.y + botaojogar.height * 1.3)
+        botaosair.set_position(botaojogar.x, botaoranking.y + botaojogar.height * 1.3)
+        #
+        while True:
+            posicao = self.mouse.get_position()
+            # inputs do mouse
+            self.mousesprite.set_position(posicao[0], posicao[1])
+            self.mousehitbox.set_position(posicao[0], posicao[1])
+            mb1click = self.mouse.is_button_pressed(1)
+            # checar botao apertado
+            if True:  # if redundante proposital, para que dê pra colapsar todos os ifs abaixo de uma vez no pycharm:
+                # botao jogar
+                if self.mousehitbox.collided_perfect(botaojogar):
+                    botaojogar.set_curr_frame(1)
+                    if not mb1click and mb1click2:
+                        # animacaojogar()
+                        return dificuldade
+                else:
+                    botaojogar.set_curr_frame(0)
+                # botao dificuldade
+                if self.mousehitbox.collided_perfect(botaodificuldade):
+                    botaodificuldade.set_curr_frame(1)
+                    if not mb1click and mb1click2:
+                        dificuldadeindice += 1
+                        dificuldade = dificuldadeslista[dificuldadeindice % 3]
+                else:
+                    botaodificuldade.set_curr_frame(0)
+                # botao ranking
+                if self.mousehitbox.collided_perfect(botaoranking):
+                    botaoranking.set_curr_frame(1)
+                    if not mb1click and mb1click2:
+                        self.ranking.drawstate = not self.ranking.drawstate
+                elif not self.ranking.drawstate:
+                    botaoranking.set_curr_frame(0)
+                # botao sair
+                if self.mousehitbox.collided_perfect(botaosair):
+                    botaosair.set_curr_frame(1)
+                    if not mb1click and mb1click2:
+                        self.ranking.saverank()
+                        # animacaosair()
+                        return "Sair"
+                else:
+                    botaosair.set_curr_frame(0)
+            mb1click2 = self.mouse.is_button_pressed(1)
+            # updates
+            self.janela.update()
+            # draws
+            fundo.draw()
+            botaojogar.draw()
+            botaodificuldade.draw()
+            self.janela.draw_text(dificuldade, botaodificuldade.x + 20,
+                                  botaodificuldade.y + botaodificuldade.height * 0.74, tamanhofonte)
+            botaoranking.draw()
+            botaosair.draw()
+            # ranking caso on
+            if self.ranking.drawstate:
+                self.ranking.animacao(1)
                 botaoranking.set_curr_frame(1)
-                if not mb1click and mb1click2:
-                    ranking.drawstate = not ranking.drawstate
-            elif not ranking.drawstate:
-                botaoranking.set_curr_frame(0)
-            # botao sair
-            if mousehitbox.collided_perfect(botaosair):
-                botaosair.set_curr_frame(1)
-                if not mb1click and mb1click2:
-                    ranking.saverank()
-                    # animacaosair()
-                    return "Fechar"
             else:
-                botaosair.set_curr_frame(0)
-        mb1click2 = mouse.is_button_pressed(1)
-        # updates
-        janela.update()
-        # draws
-        fundo.draw()
-        botaojogar.draw()
-        botaodificuldade.draw()
-        janela.draw_text(dificuldade, botaodificuldade.x + 20, botaodificuldade.y + botaodificuldade.height * 0.74,
-                         tamanhofonte)
-        botaoranking.draw()
-        botaosair.draw()
-        # ranking caso on
-        if ranking.drawstate:
-            ranking.animacao(1)
-            print(ranking.draw())
-            botaoranking.set_curr_frame(1)
-        else:
-            ranking.animacao(-1)
-        # mouse sempre por último:
-        mousesprite.draw()
-        mousehitbox.draw()
+                self.ranking.animacao(-1)
+            # mouse sempre por último:
+            self.mousesprite.draw()
+            self.mousehitbox.draw()
 
-
-def menupause(janela, mouse, teclado):
-    esc_pressed_past = esc_pressed_now = False
-    mb1_pressed_past = mb1_pressed_now = False
-    botao_sair = Sprite('botaosair.png')
-    botao_sair.set_position(janela.width/2, janela.height/2)
-    mousesprite = Sprite('mouse.png')
-    mousesprite.set_position(janela.width / 2 - mousesprite.width / 2, janela.height / 2 - mousesprite.height / 2)
-    mousehitbox = Sprite('1x1.png')
-    mouse.hide()
-    while True:
-        mouse_position = mouse.get_position()
-        mousesprite.set_position(mouse_position[0], mouse_position[1])
-        mousehitbox.set_position(mousesprite.x, mousesprite.y)
+    def menupause(self):
+        self.botao_sair.set_position(self.janela.width/2, self.janela.height/2)
+        self.mouse.hide()
+        # while True:
         # inputs
-        esc_pressed_now = teclado.key_pressed('esc')
-        mb1_pressed_now = mouse.is_button_pressed(1)
-        if esc_pressed_past and not esc_pressed_now:
+        mouse_position = self.mouse.get_position()
+        self.mousesprite.set_position(mouse_position[0], mouse_position[1])
+        self.mousehitbox.set_position(mouse_position[0], mouse_position[1])
+        esc_pressed_now = self.teclado.key_pressed('esc')
+        mb1_pressed_now = self.mouse.is_button_pressed(1)
+        if not self.esc_pressed_past and not esc_pressed_now:
+            self.double_esc_prevention = False
+        if self.esc_pressed_past and not esc_pressed_now and not self.double_esc_prevention:
             return 'jogar'
-        if not mb1_pressed_now and mb1_pressed_past:
-            if mousehitbox.collided_perfect(botao_sair):
-                return ''
-        esc_pressed_past = teclado.key_pressed('esc')
-        mb1_pressed_past = mouse.is_button_pressed(1)
+        if self.mousehitbox.collided_perfect(self.botao_sair):
+            self.botao_sair.set_curr_frame(1)
+            if self.mb1_pressed_past and not mb1_pressed_now:
+                print('a')
+                return 'jogar'
+        else:
+            self.botao_sair.set_curr_frame(0)
+        self.esc_pressed_past = self.teclado.key_pressed('esc')
+        print(self.mb1_pressed_past, mb1_pressed_now)
+        self.mb1_pressed_past = self.mouse.is_button_pressed(1)
         # updates
-        botao_sair.draw()
-        # draw
+        self.botao_sair.draw()
+        self.mousesprite.draw()
+        self.mousehitbox.draw()
+        return False  # se chegou até aqui, jogando deve continuar falso.
