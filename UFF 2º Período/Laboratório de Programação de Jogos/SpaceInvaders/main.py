@@ -2,12 +2,8 @@ from MenuInicial.menu import Menu
 from PPlay.window import Window
 from PPlay.sprite import Sprite
 from PPlay.gameimage import GameImage
-from Entidades import Player, Tiro
-# variáveis de debug
-debug = True
-fps = 0
-cronometro_s = 0
-frames_acumulados_1s = 0
+from Entidades import Player, Tiro, Enemy
+from Debug import Debug
 # variáveis de jogo
 janela = Window(1366, 768)
 mouse = janela.get_mouse()
@@ -15,9 +11,12 @@ teclado = janela.get_keyboard()
 menu = Menu(janela)
 rodando = False
 fundojogo = GameImage('MenuInicial/espaco.jpg')
+# variáveis de debug
+debug = Debug(janela, False)
+
 while True:
     janela.update()
-    dificuldade = menu.menuinicial()
+    dificuldade = menu.menuinicial(debug)
     if not dificuldade or dificuldade == 'Sair':
         exit()
     else:
@@ -26,8 +25,11 @@ while True:
     if rodando:
         player = Player(Sprite('Player.png'), dificuldade)
         player.set_position(janela.width / 2 - player.sprite.width / 2, janela.height - player.sprite.height)
+        Tiro.lista = []
         reload_timecounter = player.tiros_delay
         esc_pressed_past = False
+        Enemy.reset()
+        Enemy.spawn(dificuldade, 12, 1)
 
     while rodando:
         janela.update()
@@ -39,19 +41,18 @@ while True:
             menu.esc_pressed_past = menu.mb1_pressed_past = False
             menu.double_esc_prevention = True
             while not jogando:
+                janela.update()
                 fundojogo.draw()
                 player.draw()
+                Enemy.desenhar()
                 Tiro.draw()
                 jogando = menu.menupause()
-                janela.update()
+                if jogando:
+                    break
                 if debug:
-                    janela.draw_text(str(int(fps)), janela.width - 160, 45, 45, (255, 255, 0))
-                    if cronometro_s < 0.35:
-                        cronometro_s += janela.delta_time()
-                        frames_acumulados_1s += 1
-                    else:
-                        fps = frames_acumulados_1s / cronometro_s
-                        cronometro_s = frames_acumulados_1s = 0
+                    debug.show_fps()
+            if jogando == 'mainmenu':
+                break
         esc_pressed_past = teclado.key_pressed('esc')
         if teclado.key_pressed('left'):
             if player.x > 0:
@@ -69,18 +70,16 @@ while True:
                 reload_timecounter = 0
         # updates:
         reload_timecounter += janela.delta_time()
-        # debug updates:
-        if debug:
-            if cronometro_s < 0.35:
-                cronometro_s += janela.delta_time()
-                frames_acumulados_1s += 1
-            else:
-                fps = frames_acumulados_1s / cronometro_s
-                cronometro_s = frames_acumulados_1s = 0
+        Enemy.checar_hit(Tiro.lista)
+        if not Enemy.tem_alien():
+            break
+
         # draws
         fundojogo.draw()
+        Enemy.colisao_parede(janela.width, janela.delta_time())
+        Enemy.desenhar_e_mover(janela.delta_time())
         Tiro.update_and_draw(janela)
         player.draw()
         # debug draws
         if debug:
-            janela.draw_text(str(int(fps)), janela.width - 160, 45, 45, (255, 255, 0))
+            debug.show_fps()

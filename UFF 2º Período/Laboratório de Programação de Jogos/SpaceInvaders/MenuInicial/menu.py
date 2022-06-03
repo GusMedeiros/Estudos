@@ -17,9 +17,12 @@ class Menu:
         self.esc_pressed_past = self.mb1_pressed_past = False
         self.double_esc_prevention = True
         # botoes
+        self.botao_jogar = Sprite(f'{self.caminhosprites}Botaojogar.png', 2)
         self.botao_sair = Sprite(f'{self.caminhosprites}botaosair.png', 2)
+        self.botao_retornar = Sprite(f'{self.caminhosprites}botaoretornar.png', 2)
+        self.botao_menu_principal = Sprite(f'{self.caminhosprites}botaomenuprincipal.png', 2)
 
-    def menuinicial(self):
+    def menuinicial(self, debug=False):
         fundo = GameImage(f'{self.caminhosprites}espaco.jpg')
         # mouse
         self.mousesprite.set_position(self.janela.width / 2 - self.mousesprite.width / 2,
@@ -27,7 +30,6 @@ class Menu:
         self.mouse.hide()
         mb1click2 = False
         # jogar
-        botaojogar = Sprite(f'{self.caminhosprites}Botaojogar.png', 2)
         # ranking
         botaoranking = Sprite(f'{self.caminhosprites}Botaoranking.png', 2)
         # sair
@@ -40,10 +42,10 @@ class Menu:
         tamanhofonte = 28
 
         # posicoes dos botões
-        botaojogar.set_position(self.janela.width * 0.825 - botaojogar.width / 2, self.janela.height * 1 / 10)
-        botaodificuldade.set_position(botaojogar.x, botaojogar.y + botaojogar.height * 1.3)
-        botaoranking.set_position(botaojogar.x, botaodificuldade.y + botaojogar.height * 1.3)
-        botaosair.set_position(botaojogar.x, botaoranking.y + botaojogar.height * 1.3)
+        self.botao_jogar.set_position(self.janela.width * 0.825 - self.botao_jogar.width/2, self.janela.height * 1/10)
+        botaodificuldade.set_position(self.botao_jogar.x, self.botao_jogar.y + self.botao_jogar.height * 1.3)
+        botaoranking.set_position(self.botao_jogar.x, botaodificuldade.y + self.botao_jogar.height * 1.3)
+        botaosair.set_position(self.botao_jogar.x, botaoranking.y + self.botao_jogar.height * 1.3)
         #
         while True:
             posicao = self.mouse.get_position()
@@ -54,13 +56,13 @@ class Menu:
             # checar botao apertado
             if True:  # if redundante proposital, para que dê pra colapsar todos os ifs abaixo de uma vez no pycharm:
                 # botao jogar
-                if self.mousehitbox.collided_perfect(botaojogar):
-                    botaojogar.set_curr_frame(1)
+                if self.mousehitbox.collided_perfect(self.botao_jogar):
+                    self.botao_jogar.set_curr_frame(1)
                     if not mb1click and mb1click2:
                         # animacaojogar()
                         return dificuldade
                 else:
-                    botaojogar.set_curr_frame(0)
+                    self.botao_jogar.set_curr_frame(0)
                 # botao dificuldade
                 if self.mousehitbox.collided_perfect(botaodificuldade):
                     botaodificuldade.set_curr_frame(1)
@@ -90,7 +92,7 @@ class Menu:
             self.janela.update()
             # draws
             fundo.draw()
-            botaojogar.draw()
+            self.botao_jogar.draw()
             botaodificuldade.draw()
             self.janela.draw_text(dificuldade, botaodificuldade.x + 20,
                                   botaodificuldade.y + botaodificuldade.height * 0.74, tamanhofonte)
@@ -102,12 +104,16 @@ class Menu:
                 botaoranking.set_curr_frame(1)
             else:
                 self.ranking.animacao(-1)
+            if debug:
+                debug.show_fps()
             # mouse sempre por último:
             self.mousesprite.draw()
             self.mousehitbox.draw()
 
     def menupause(self):
-        self.botao_sair.set_position(self.janela.width/2, self.janela.height/2)
+        self.botao_retornar.set_position(self.janela.width - self.botao_retornar.width, self.janela.height/2)
+        self.botao_menu_principal.set_position(self.botao_retornar.x, self.botao_retornar.y +
+                                               self.botao_menu_principal.height * 1.1)
         self.mouse.hide()
         # while True:
         # inputs
@@ -116,22 +122,30 @@ class Menu:
         self.mousehitbox.set_position(mouse_position[0], mouse_position[1])
         esc_pressed_now = self.teclado.key_pressed('esc')
         mb1_pressed_now = self.mouse.is_button_pressed(1)
+        # esc (resume)
         if not self.esc_pressed_past and not esc_pressed_now:
             self.double_esc_prevention = False
         if self.esc_pressed_past and not esc_pressed_now and not self.double_esc_prevention:
             return 'jogar'
-        if self.mousehitbox.collided_perfect(self.botao_sair):
-            self.botao_sair.set_curr_frame(1)
+        # botao retornar
+        if self.mousehitbox.collided_perfect(self.botao_retornar):
+            self.botao_retornar.set_curr_frame(1)
             if self.mb1_pressed_past and not mb1_pressed_now:
-                print('a')
                 return 'jogar'
         else:
-            self.botao_sair.set_curr_frame(0)
+            self.botao_retornar.set_curr_frame(0)
+        # botao menu principal
+        if self.mousehitbox.collided_perfect(self.botao_menu_principal):
+            self.botao_menu_principal.set_curr_frame(1)
+            if self.mb1_pressed_past and not mb1_pressed_now:
+                return 'mainmenu'
+        else:
+            self.botao_menu_principal.set_curr_frame(0)
         self.esc_pressed_past = self.teclado.key_pressed('esc')
-        print(self.mb1_pressed_past, mb1_pressed_now)
         self.mb1_pressed_past = self.mouse.is_button_pressed(1)
         # updates
-        self.botao_sair.draw()
+        self.botao_retornar.draw()
+        self.botao_menu_principal.draw()
         self.mousesprite.draw()
         self.mousehitbox.draw()
         return False  # se chegou até aqui, jogando deve continuar falso.
