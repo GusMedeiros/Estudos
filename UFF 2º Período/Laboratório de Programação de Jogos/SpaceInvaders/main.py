@@ -23,13 +23,13 @@ while True:
         rodando = True
 
     if rodando:
-        player = Player(Sprite('Player.png'), dificuldade)
-        player.set_position(janela.width / 2 - player.sprite.width / 2, janela.height - player.sprite.height)
+        player = Player(dificuldade)
+        player.set_position(janela.width / 2 - player.width / 2, janela.height - player.height)
         Tiro.lista = []
         reload_timecounter = player.tiros_delay
         esc_pressed_past = False
         Enemy.reset()
-        Enemy.spawn(dificuldade, 12, 1)
+        Enemy.spawn(dificuldade, 12, 6)
 
     while rodando:
         janela.update()
@@ -77,7 +77,7 @@ while True:
         # draws
         fundojogo.draw()
         Enemy.colisao_parede(janela.width, janela.delta_time())
-        Enemy.desenhar_e_mover(janela.delta_time())
+        Enemy.desenhar_e_update(janela.delta_time())
         Tiro.update_and_draw(janela)
         player.draw()
         # debug draws

@@ -11,7 +11,7 @@ class Enemy(Sprite):
     vely = 0
 
     def __init__(self, dificuldade, x=0, y=0):
-        super().__init__(self.caminho_sprite, 2)
+        super().__init__(self.caminho_sprite, 3)
 
         self.x = x
         self.y = y
@@ -38,15 +38,18 @@ class Enemy(Sprite):
                 cls.matriz[i].append(alien)
 
     @classmethod
-    def desenhar_e_mover(cls, delta_time):
+    def desenhar_e_update(cls, delta_time):
         cls.tempo_acumulado_frames += delta_time
         for linha in cls.matriz:
-            for alien in linha:
+            for j, alien in enumerate(linha):
                 alien.x += cls.velx * delta_time
                 alien.y += cls.vely
                 alien.draw()
                 if cls.tempo_acumulado_frames > 0.5:
-                    alien.set_curr_frame((alien.get_curr_frame() + 1) % 2)
+                    if alien.get_curr_frame() != 2:
+                        alien.set_curr_frame((alien.get_curr_frame() + 1) % 2)
+                    else:
+                        linha.pop(j)
         if cls.tempo_acumulado_frames > 0.5:
             cls.tempo_acumulado_frames = 0
 
@@ -55,12 +58,14 @@ class Enemy(Sprite):
         for linha in cls.matriz:
             for alien in linha:
                 alien.draw()
+
     @classmethod
     def tem_alien(cls):
         for linha in cls.matriz:
             if linha:
                 return True
         return False
+
     @classmethod
     def colisao_parede(cls, width, delta_time):
         for linha in cls.matriz:
@@ -89,19 +94,19 @@ class Enemy(Sprite):
                 if linha:
                     if tiro.y <= linha[0].y + linha[0].height and tiro.y + tiro.height >= linha[0].y:
                         for j, alien in enumerate(linha):
-                            if lista_tiro:
-                                if tiro.collided(alien):
-                                    linha.pop(j)
+                            if lista_tiro and linha[j]:
+                                if tiro.collided(alien) and alien.get_curr_frame() != 2:
                                     lista_tiro.pop(t)
+                                    alien.set_curr_frame(2)
 
 
-class Player:
-    def __init__(self, sprite, dificuldade, x=0, y=0):
-        self.sprite = sprite
-        self._x = x
-        self._y = y
-        self.width = sprite.width
-        self.height = sprite.height
+class Player(Sprite):
+    caminho_sprite = 'Player.png'
+
+    def __init__(self, dificuldade, x=0, y=0):
+        super().__init__(self.caminho_sprite)
+        self.x = x
+        self.y = y
         if dificuldade == 'Fácil':
             self.velX = 600
             self.tiros_delay = 0.15
@@ -111,27 +116,6 @@ class Player:
         else:
             self.velX = 300
             self.tiros_delay = 0.5
-
-    @property
-    def x(self):
-        return self._x
-
-    @x.setter
-    def x(self, x):
-        self._x = x
-        self.sprite.x = x
-
-    @property
-    def y(self):
-        return self._y
-
-    def set_position(self, x, y):
-        self._x = x
-        self._y = y
-        self.sprite.set_position(x, y)
-
-    def draw(self):
-        self.sprite.draw()
 
 
 class Tiro:
