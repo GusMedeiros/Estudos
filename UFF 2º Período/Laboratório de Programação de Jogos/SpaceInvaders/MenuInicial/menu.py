@@ -56,7 +56,7 @@ class Menu:
             # checar botao apertado
             if True:  # if redundante proposital, para que dê pra colapsar todos os ifs abaixo de uma vez no pycharm:
                 # botao jogar
-                if self.mousehitbox.collided_perfect(self.botao_jogar):
+                if self.mousehitbox.collided(self.botao_jogar):
                     self.botao_jogar.set_curr_frame(1)
                     if not mb1click and mb1click2:
                         # animacaojogar()
@@ -64,7 +64,7 @@ class Menu:
                 else:
                     self.botao_jogar.set_curr_frame(0)
                 # botao dificuldade
-                if self.mousehitbox.collided_perfect(botaodificuldade):
+                if self.mousehitbox.collided(botaodificuldade):
                     botaodificuldade.set_curr_frame(1)
                     if not mb1click and mb1click2:
                         dificuldadeindice += 1
@@ -72,14 +72,14 @@ class Menu:
                 else:
                     botaodificuldade.set_curr_frame(0)
                 # botao ranking
-                if self.mousehitbox.collided_perfect(botaoranking):
+                if self.mousehitbox.collided(botaoranking):
                     botaoranking.set_curr_frame(1)
                     if not mb1click and mb1click2:
                         self.ranking.drawstate = not self.ranking.drawstate
                 elif not self.ranking.drawstate:
                     botaoranking.set_curr_frame(0)
                 # botao sair
-                if self.mousehitbox.collided_perfect(botaosair):
+                if self.mousehitbox.collided(botaosair):
                     botaosair.set_curr_frame(1)
                     if not mb1click and mb1click2:
                         self.ranking.saverank()
@@ -128,14 +128,14 @@ class Menu:
         if self.esc_pressed_past and not esc_pressed_now and not self.double_esc_prevention:
             return 'jogar'
         # botao retornar
-        if self.mousehitbox.collided_perfect(self.botao_retornar):
+        if self.mousehitbox.collided(self.botao_retornar):
             self.botao_retornar.set_curr_frame(1)
             if self.mb1_pressed_past and not mb1_pressed_now:
                 return 'jogar'
         else:
             self.botao_retornar.set_curr_frame(0)
         # botao menu principal
-        if self.mousehitbox.collided_perfect(self.botao_menu_principal):
+        if self.mousehitbox.collided(self.botao_menu_principal):
             self.botao_menu_principal.set_curr_frame(1)
             if self.mb1_pressed_past and not mb1_pressed_now:
                 return 'mainmenu'
