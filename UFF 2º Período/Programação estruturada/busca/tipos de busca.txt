@@ -1,6 +1,0 @@
-Busca linear:
-só vale a pena quando for algo muito simples, ao ponto que seria contraprodutivo fazer um algoritmo de busca
-mais eficiente.
-
-Busca binária:
-funciona somente com vetores ordenados, não usar quando forem
