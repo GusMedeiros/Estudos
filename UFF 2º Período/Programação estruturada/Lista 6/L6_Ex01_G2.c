@@ -36,7 +36,10 @@ int main(void){
     int *tam, i;
 
     tam = (int *) malloc(sizeof(int));
-
+    if (tam == NULL){
+                printf("Erro ao alocar memória");
+                exit(1);
+            }
     v_acima_media = acima_da_media(9, v, tam);
     
     for(i=0;i<(*tam);i++){

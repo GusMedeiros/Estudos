@@ -24,6 +24,10 @@ while(char_atual != '\r' && indice < max)
             tamanho_palavra = (fim_palavra - inicio_palavra);
             //printf("%d\n", tamanho_palavra);
             palavra_atual = malloc(sizeof(char) * (tamanho_palavra));
+            if (palavra_atual == NULL){
+                printf("Erro ao alocar memória");
+                exit(1);
+            }
             //printf("\n%x\n", palavra_atual); // endereco
             palavra_atual = palavra(frase, palavra_atual, inicio_palavra, tamanho_palavra);
             inicio_palavra = indice + 1;

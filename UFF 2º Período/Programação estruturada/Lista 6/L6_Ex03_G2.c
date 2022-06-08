@@ -33,7 +33,10 @@ int main(void){
     int *alunos_aprovados, *tam, i;
 
     tam = (int *) malloc(sizeof(int));
-
+    if (tam == NULL){
+                printf("Erro ao alocar memória");
+                exit(1);
+            }
     alunos_aprovados = aprovados(5, turma, notas, tam);
 
     for(i=0;i<(*tam);i++){
