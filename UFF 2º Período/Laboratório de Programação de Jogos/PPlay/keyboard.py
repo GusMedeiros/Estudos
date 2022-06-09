@@ -25,7 +25,9 @@ class Keyboard():
                 print(event.key)
                 
     def to_pattern(self, key):
-        if((key=="LEFT") or (key=="left")):
+        if key == 'f3' or key == 'F3':
+            return pygame.K_F3
+        elif (key == "LEFT") or (key == "left"):
             return pygame.K_LEFT
         elif((key=="RIGHT") or (key=="right")):
             return pygame.K_RIGHT

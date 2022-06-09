@@ -13,7 +13,7 @@ menu = Menu(janela)
 rodando = False
 fundojogo = GameImage('MenuInicial/espaco.jpg')
 # variáveis de debug
-debug = Debug(janela, False)
+debug = Debug(janela, True)
 ranking = Ranking(janela)
 while True:
     janela.update()
@@ -33,6 +33,7 @@ while True:
         Enemy.spawn(dificuldade, 12, 4)
         score = 0
         nome_jogador = menu.pedir_nome(debug)
+        f3_pressed_past = False
 
     while rodando:
         janela.update()
@@ -53,7 +54,7 @@ while True:
                 if jogando:
                     break
                 if debug:
-                    debug.show_fps()
+                    debug.show_fps_if_debug()
             if jogando == 'mainmenu':
                 break
         esc_pressed_past = teclado.key_pressed('esc')
@@ -71,6 +72,8 @@ while True:
             if reload_timecounter >= player.tiros_delay:
                 Tiro(Sprite('tiro.png'), player.x + player.width/2, player.y)
                 reload_timecounter = 0
+        f3_pressed_past = teclado.key_pressed('f3')
+
         # updates:
         reload_timecounter += janela.delta_time()
         score += Enemy.checar_hit(Tiro.lista)
@@ -90,4 +93,4 @@ while True:
         player.draw()
         # debug draws
         if debug:
-            debug.show_fps()
+            debug.show_fps_if_debug()

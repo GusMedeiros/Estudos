@@ -1,7 +1,7 @@
 from PPlay.sprite import Sprite
 from PPlay.gameimage import GameImage
 from SpaceInvaders.ranking import Ranking
-
+from SpaceInvaders.Debug import Debug
 
 class Menu:
     caminhosprites = 'MenuInicial/'
@@ -22,7 +22,7 @@ class Menu:
         self.botao_retornar = Sprite(f'{self.caminhosprites}botaoretornar.png', 2)
         self.botao_menu_principal = Sprite(f'{self.caminhosprites}botaomenuprincipal.png', 2)
 
-    def menuinicial(self, debug=False):
+    def menuinicial(self, debug=None):
         fundo = GameImage(f'{self.caminhosprites}espaco.jpg')
         # mouse
         self.mousesprite.set_position(self.janela.width / 2 - self.mousesprite.width / 2,
@@ -104,7 +104,7 @@ class Menu:
             else:
                 self.ranking.animacao(-1)
             if debug:
-                debug.show_fps()
+                debug.show_fps_if_debug()
             # mouse sempre por último:
             self.mousesprite.draw()
             self.mousehitbox.draw()
@@ -187,5 +187,5 @@ class Menu:
                 space_pressed_past = self.teclado.key_pressed('space')
                 backspace_pressed_past = self.teclado.key_pressed('backspace')
             if debug:
-                debug.show_fps()
+                debug.show_fps_if_debug()
         return nome
