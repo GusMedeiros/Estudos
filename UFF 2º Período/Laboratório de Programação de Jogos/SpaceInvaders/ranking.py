@@ -1,42 +1,61 @@
 class Ranking:
-    caminho_ranking = "ranking.json"
+    caminho_ranking = "ranking.txt"
     caminho_sprite = "MenuInicial/Botao Grande Vazio.png"
 
     def __init__(self, janela):
         from PPlay.sprite import Sprite
+        from os.path import exists
+        from pygame.font import Font
+        from os import getcwd
         self.drawstate = False
         self.drawfinished = False
         self.janela = janela
+        self.fonte = Font(f'{getcwd()}\FreePixel.ttf', 30)
         self.paralelogramo = Sprite(self.caminho_sprite)
         self.paralelogramo.xoriginal = 0 - self.paralelogramo.width
         self.paralelogramo.set_position(self.paralelogramo.xoriginal, 4)
-        arquivo = open(self.caminho_ranking, "w")
-        arquivo.close()
-        arquivo = open(self.caminho_ranking, "r")
-        self.RAMrank = [linha for i, linha in enumerate(arquivo) if i < 10]
+        if not exists(self.caminho_ranking):
+            arquivo = open(self.caminho_ranking, "w")
+            arquivo.close()
+        arquivo = open(self.caminho_ranking, "r", encoding='utf-8')
+        self.RAMrank = [linha for i, linha in enumerate(arquivo) if i <= 10]
         arquivo.close()
         self.qtdparalelogramos = self.janela.height // (self.paralelogramo.height + 4)
 
     def saverank(self):
         self.RAMrank.sort(key=lambda l: int(l.split("|")[0]), reverse=True)
+        self.RAMrank.sort(key=lambda l: (l.split("|")[2][2]), reverse=True)
         from os import remove, rename
         arquivo_temp = open(self.caminho_ranking + "temp", "w", encoding="utf-8")
-        for linha in self.RAMrank:
+        for i, linha in enumerate(self.RAMrank):
+            print([linha.rstrip()])
             arquivo_temp.write(linha.rstrip())
-            if linha != self.RAMrank[-1]:
+            if i != len(self.RAMrank) - 1:  # se nao for o ultimo elemento, pula linha.
                 arquivo_temp.write("\n")
         arquivo_temp.close()
         remove(self.caminho_ranking)
         rename(self.caminho_ranking + "temp", self.caminho_ranking)
 
-    def updaterank(self, nome, score):
-        self.RAMrank.append(f"{score}|{nome}")
+    def updaterank(self, score, nome, dificuldade):
+        self.RAMrank.append(f"{score}|{nome}|{dificuldade}")
         self.RAMrank.sort(key=lambda x: x.split("|")[0])
+        for elem in self.RAMrank:
+            print(elem + 'a')
 
     def animacao(self, direcao):
         velX = self.paralelogramo.width * 2 * direcao
-        for _ in range(self.qtdparalelogramos):
+        cabecalho = '  NOME:           | SCORE:     | DIFICULDADE:'
+        for i in range(self.qtdparalelogramos):
             self.paralelogramo.draw()
+            if i < len(self.RAMrank):
+                rank = self.RAMrank[i].rstrip().split('|')
+                texto = f'{i+1}º Lugar | Pontos: {rank[0]:5}| Dificuldade: {rank[2]:7}'
+                texto2 = f'Nome: {rank[1]}'
+                self.janela.draw_text(texto, self.paralelogramo.x + 40, self.paralelogramo.y + 10, 30, (0, 246, 245),
+                                      bold=True, font=self.fonte)
+                self.janela.draw_text(texto2, self.paralelogramo.x + 23, self.paralelogramo.y + 40, 30, (0, 246, 245),
+                                      bold=True, font=self.fonte)
+
             self.paralelogramo.y += self.paralelogramo.height + 4
         self.paralelogramo.y = 4
 
@@ -54,4 +73,3 @@ class Ranking:
     def draw(self):
         for linha in self.RAMrank:
             linha = linha.split("|")
-            print(linha[0], linha[1])

@@ -4,6 +4,7 @@ from PPlay.sprite import Sprite
 from PPlay.gameimage import GameImage
 from Entidades import Player, Tiro, Enemy
 from Debug import Debug
+from ranking import Ranking
 # variáveis de jogo
 janela = Window(1366, 768)
 mouse = janela.get_mouse()
@@ -13,7 +14,7 @@ rodando = False
 fundojogo = GameImage('MenuInicial/espaco.jpg')
 # variáveis de debug
 debug = Debug(janela, False)
-
+ranking = Ranking(janela)
 while True:
     janela.update()
     dificuldade = menu.menuinicial(debug)
@@ -29,7 +30,9 @@ while True:
         reload_timecounter = player.tiros_delay
         esc_pressed_past = False
         Enemy.reset()
-        Enemy.spawn(dificuldade, 12, 6)
+        Enemy.spawn(dificuldade, 12, 4)
+        score = 0
+        nome_jogador = menu.pedir_nome(debug)
 
     while rodando:
         janela.update()
@@ -70,15 +73,20 @@ while True:
                 reload_timecounter = 0
         # updates:
         reload_timecounter += janela.delta_time()
-        Enemy.checar_hit(Tiro.lista)
+        score += Enemy.checar_hit(Tiro.lista)
         if not Enemy.tem_alien():
+            ranking.updaterank(score, nome_jogador, dificuldade)
+            ranking.saverank()
+            ranking = Ranking(janela)
+            menu.ranking = ranking
             break
 
         # draws
+        # print(ranking.RAMrank , '\n\n')
         fundojogo.draw()
         Enemy.colisao_parede(janela.width, janela.delta_time())
         Enemy.desenhar_e_update(janela.delta_time())
-        Tiro.update_and_draw(janela)
+        Tiro.update_and_draw(janela, ranking)
         player.draw()
         # debug draws
         if debug:

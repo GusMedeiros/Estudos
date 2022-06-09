@@ -89,6 +89,7 @@ class Enemy(Sprite):
 
     @classmethod
     def checar_hit(cls, lista_tiro):
+        qtdhits = 0
         for t, tiro in enumerate(lista_tiro):
             for i, linha in enumerate(cls.matriz):
                 if linha:
@@ -98,6 +99,8 @@ class Enemy(Sprite):
                                 if tiro.collided(alien) and alien.get_curr_frame() != 2:
                                     lista_tiro.pop(t)
                                     alien.set_curr_frame(2)
+                                    qtdhits += 1
+        return qtdhits
 
 
 class Player(Sprite):
@@ -129,7 +132,7 @@ class Tiro:
         self.lista.append(sprite)
 
     @classmethod
-    def update_and_draw(cls, janela):
+    def update_and_draw(cls, janela, ranking):
         for tiro in cls.lista:
             tiro.y -= cls.velY * janela.delta_time()
             if tiro.y + tiro.height <= 0:

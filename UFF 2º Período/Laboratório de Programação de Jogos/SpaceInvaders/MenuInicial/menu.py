@@ -82,8 +82,7 @@ class Menu:
                 if self.mousehitbox.collided(botaosair):
                     botaosair.set_curr_frame(1)
                     if not mb1click and mb1click2:
-                        self.ranking.saverank()
-                        # animacaosair()
+                        # animacaosair()?
                         return "Sair"
                 else:
                     botaosair.set_curr_frame(0)
@@ -149,3 +148,44 @@ class Menu:
         self.mousesprite.draw()
         self.mousehitbox.draw()
         return False  # se chegou até aqui, jogando deve continuar falso.
+
+    def pedir_nome(self, debug=None):
+        import pygame
+        nome = ''
+        backspace_cronometro = 0
+        campo_nome = Sprite(f'{self.caminhosprites}botaopequenovazio.png', 2)
+        campo_nome.set_position(self.janela.width/2 - 210, self.janela.height/2 - 3)
+        pressed_past = [False for i in range(26)]
+        space_pressed_past = backspace_pressed_past = False
+        fundo = GameImage(f'{self.caminhosprites}espaco.jpg')
+        letra_atual = ''
+        while not self.teclado.key_pressed('enter'):
+            nome_maxsize = 11
+            self.janela.update()
+            fundo.draw()
+            campo_nome.draw()
+            self.janela.draw_text(f"PLAYER NAME:", self.janela.width/2 - 150, self.janela.height/2,
+                                  50, (0, 246, 245))
+            self.janela.draw_text(f"{nome}", self.janela.width/2 - 150, self.janela.height/2 + 50,
+                                  48, (255, 255, 255))
+            letra_atual = 'A'
+            for i in range(26):
+                letra_atual = chr(ord('A') + (ord(letra_atual) + 1) % ord('A') % 26)
+                if self.teclado.key_pressed(letra_atual) and not pressed_past[i]\
+                        and len(nome) < nome_maxsize:
+                    nome += letra_atual
+                elif nome:
+                    # if nome cumpre dois propositos: nao deixar o primeiro char ser espaço e evitar crash com nome[-1]
+                    if self.teclado.key_pressed('space') and not space_pressed_past\
+                            and len(nome) < nome_maxsize and nome[-1] != ' ':
+                        nome += ' '
+                    elif self.teclado.key_pressed('backspace') and not backspace_pressed_past \
+                            and len(nome) > 0:
+                        nome = nome[:-1]
+
+                pressed_past[i] = self.teclado.key_pressed(letra_atual)
+                space_pressed_past = self.teclado.key_pressed('space')
+                backspace_pressed_past = self.teclado.key_pressed('backspace')
+            if debug:
+                debug.show_fps()
+        return nome

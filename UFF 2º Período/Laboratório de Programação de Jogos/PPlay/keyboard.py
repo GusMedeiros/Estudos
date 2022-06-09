@@ -36,6 +36,8 @@ class Keyboard():
         elif((key=="ENTER") or (key=="enter") or
              (key=="RETURN") or (key=="return")):
             return pygame.K_RETURN
+        elif(key=="BACKSPACE") or (key=="backspace"):
+            return pygame.K_BACKSPACE
         elif((key=="ESCAPE") or (key=="escape") or
              (key=="ESC") or (key=="esc")):
             return pygame.K_ESCAPE
