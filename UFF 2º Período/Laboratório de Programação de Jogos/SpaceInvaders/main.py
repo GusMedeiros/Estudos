@@ -78,7 +78,7 @@ while True:
         # updates:
         reload_timecounter += janela.delta_time()
         score += Enemy.checar_hit(Tiro.lista)
-        print(Enemy.qtdvivos)
+        # print(Enemy.qtdvivos)
         if Enemy.qtdvivos == 0:
             ranking.updaterank(score, nome_jogador, dificuldade)
             ranking.saverank()

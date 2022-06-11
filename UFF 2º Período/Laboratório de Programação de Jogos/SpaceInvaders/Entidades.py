@@ -1,6 +1,5 @@
 from PPlay.sprite import Sprite
 
-
 class Enemy(Sprite):
     matriz = []
     leftmost_i = 0
@@ -11,7 +10,7 @@ class Enemy(Sprite):
     upmost_j = 0
     downmost_i = int
     downmost_j = 0
-    alien_width = 61
+    alien_width = 62
     alien_height = 46
     caminho_sprite = 'alien.png'
     tempo_acumulado_frames = 0
@@ -38,7 +37,7 @@ class Enemy(Sprite):
         cls.upmost_j = 0
         cls.downmost_i = int
         cls.downmost_j = 0
-        cls.alien_width = 61
+        cls.alien_width = 62
         cls.alien_height = 46
         cls.caminho_sprite = 'alien.png'
         cls.tempo_acumulado_frames = 0
@@ -234,16 +233,17 @@ class Enemy(Sprite):
         for t, tiro in enumerate(lista_tiro):
             if tiro.x + tiro.width > leftmost_x and tiro.x < rightmost_x + alien_distance_horizontal \
                     and tiro.y + tiro.height > upmost_y and tiro.y < downmost_y + alien_distance_vertical:
-                hit_j = int(l_j + (tiro.x - leftmost_x) // alien_distance_horizontal)
-                hit_i = int(u_i + (tiro.y - upmost_y) // alien_distance_vertical)
-                if hit_i == 4:
+                hit_j = int(l_j + abs(tiro.x - leftmost_x) // alien_distance_horizontal)
+                hit_i = int(u_i + abs(tiro.y - upmost_y) // alien_distance_vertical)
+                # print('a', alien_distance_horizontal, (tiro.x - leftmost_x) // alien_distance_horizontal)
+                '''if hit_i == 4:
                     hit_i = 3
                 if hit_j == 12:
-                    hit_j = 11
-                # print(hit_i, hit_j)
+                    hit_j = 11'''
+                print(hit_i, hit_j)
                 alien = cls.matriz[hit_i][hit_j]
                 if alien:
-                    # print(f'X do tiro: {tiro.x}, X do alien: {alien.x}, índice i: {hit_i}, X do leftmost: {leftmost_x}')
+                    print(f'X do tiro: {tiro.x}, X do alien: {alien.x}, índice i: {hit_i}, X do leftmost: {leftmost_x}')
                     alien.set_curr_frame(2)
                     lista_tiro.pop(t)
                     qtdhits += 1
