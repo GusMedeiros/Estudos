@@ -5,6 +5,7 @@ from PPlay.gameimage import GameImage
 from Entidades import Player, Tiro, Enemy
 from Debug import Debug
 from ranking import Ranking
+import pygame
 # variáveis de jogo
 janela = Window(1366, 768)
 mouse = janela.get_mouse()
@@ -77,7 +78,8 @@ while True:
         # updates:
         reload_timecounter += janela.delta_time()
         score += Enemy.checar_hit(Tiro.lista)
-        if not Enemy.tem_alien():
+        print(Enemy.qtdvivos)
+        if Enemy.qtdvivos == 0:
             ranking.updaterank(score, nome_jogador, dificuldade)
             ranking.saverank()
             ranking = Ranking(janela)
@@ -90,6 +92,7 @@ while True:
         Enemy.colisao_parede(janela.width, janela.delta_time())
         Enemy.desenhar_e_update(janela.delta_time())
         Tiro.update_and_draw(janela, ranking)
+        # janela.draw_text(str(score))
         player.draw()
         # debug draws
         if debug:

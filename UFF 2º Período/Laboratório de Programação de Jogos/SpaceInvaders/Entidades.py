@@ -3,12 +3,23 @@ from PPlay.sprite import Sprite
 
 class Enemy(Sprite):
     matriz = []
+    leftmost_i = 0
+    leftmost_j = 0
+    rightmost_i = 0
+    rightmost_j = int
+    upmost_i = 0
+    upmost_j = 0
+    downmost_i = int
+    downmost_j = 0
+    alien_width = 61
+    alien_height = 46
     caminho_sprite = 'alien.png'
     tempo_acumulado_frames = 0
     tempo_acumulado_mover = 0
     colisao = False
     velx = 100
     vely = 0
+    qtdvivos = 0
 
     def __init__(self, dificuldade, x=0, y=0):
         super().__init__(self.caminho_sprite, 3)
@@ -19,6 +30,16 @@ class Enemy(Sprite):
     @classmethod
     def reset(cls):
         cls.matriz = []
+        cls.leftmost_i = 0
+        cls.leftmost_j = 0
+        cls.rightmost_i = 0
+        cls.rightmost_j = int
+        cls.upmost_i = 0
+        cls.upmost_j = 0
+        cls.downmost_i = int
+        cls.downmost_j = 0
+        cls.alien_width = 61
+        cls.alien_height = 46
         cls.caminho_sprite = 'alien.png'
         cls.tempo_acumulado_frames = 0
         cls.tempo_acumulado_mover = 0
@@ -28,6 +49,9 @@ class Enemy(Sprite):
 
     @classmethod
     def spawn(cls, dificuldade, colunas, linhas):
+        cls.downmost_i = linhas - 1
+        cls.rightmost_j = colunas - 1
+        cls.qtdvivos = colunas * linhas
         from random import randint
         for i in range(linhas):
             cls.matriz.append([])
@@ -40,38 +64,135 @@ class Enemy(Sprite):
     @classmethod
     def desenhar_e_update(cls, delta_time):
         cls.tempo_acumulado_frames += delta_time
-        for linha in cls.matriz:
+        for i, linha in enumerate(cls.matriz):
             for j, alien in enumerate(linha):
-                alien.x += cls.velx * delta_time
-                alien.y += cls.vely
-                alien.draw()
-                if cls.tempo_acumulado_frames > 0.5:
-                    if alien.get_curr_frame() != 2:
-                        alien.set_curr_frame((alien.get_curr_frame() + 1) % 2)
-                    else:
-                        linha.pop(j)
+                if alien:
+                    alien.x += cls.velx * delta_time
+                    alien.y += cls.vely
+                    alien.draw()
+                    if cls.tempo_acumulado_frames > 0.5:
+                        if alien.get_curr_frame() != 2:
+                            alien.set_curr_frame((alien.get_curr_frame() + 1) % 2)
+                        else:
+                            linha[j] = False
+                            cls.qtdvivos -= 1
+                            '''print(f'matei o {i},{j}')'''
+                            if alien:
+                                if i == cls.leftmost_i and j == cls.leftmost_j:
+                                    cls.substituir_extremo(4)
+                                    '''print("Troquei o leftmost")
+                                    print(cls.leftmost_i, cls.leftmost_j)'''
+                                if i == cls.rightmost_i and j == cls.rightmost_j:
+                                    cls.substituir_extremo(6)
+                                    '''print("Troquei o rightmost")
+                                    print(cls.rightmost_i, cls.rightmost_j)'''
+                                if i == cls.downmost_i and j == cls.downmost_j:
+                                    cls.substituir_extremo(2)
+                                    '''print("Troquei o downmost")
+                                    print(cls.downmost_i, cls.downmost_j)'''
+                                if i == cls.upmost_i and j == cls.upmost_j:
+                                    cls.substituir_extremo(8)
+                                    '''print("Troquei o upmost")
+                                    print(cls.upmost_i, cls.upmost_j)'''
+
         if cls.tempo_acumulado_frames > 0.5:
             cls.tempo_acumulado_frames = 0
+
+    @classmethod
+    def substituir_extremo(cls, extremo: int):
+        import pygame
+        """Função que deve ser chamada quando um alien de referência morrer, para substituí-lo.
+        O parâmetro extremo indica qual extremo deseja substituir.
+        Ele é análogo ao teclado numérico: 4 é o leftmost, 6 rightmost, 8 upmost, 2 downmost."""
+
+        if extremo == 4:  # leftmost
+            # Achar o alien mais à esquerda requer achar a coluna de menor índice.
+            menor_j = 10000  # portanto, inicializamos com um valor alto, para garantir que será trocado.
+            '''preferencialmente, esse alien não estará embaixo, que estatisticamente tem mais chances de ser atingido,
+            forçando uma troca desnecessária. Portanto, caso empatem no J (coluna), escolheremos o de i menor.'''
+            menor_i = 10000 # portanto, inicializamos com um valor alto, para garantir que será trocado.
+            for i, linha in enumerate(cls.matriz):
+                for j, alien in enumerate(linha):
+                    if alien:
+                        if j < menor_j:
+                            menor_i = i
+                            menor_j = j
+                        elif j == menor_j:  # desempate pelo mais acima, ou seja, menor i.
+                            if i < menor_i:
+                                menor_i = i
+            cls.leftmost_i = menor_i
+            cls.leftmost_j = menor_j
+            # cls.matriz[menor_i][menor_j].image = pygame.image.load('alienred.png').convert_alpha()
+
+        elif extremo == 6:  # rightmost
+            # Achar o alien mais à direita requer achar a coluna de maior índice.
+            maior_j = -1  # portanto, inicializamos com um valor negativo, para garantir que será trocado.
+            '''preferencialmente, esse alien não estará embaixo, que estatisticamente tem mais chances de ser atingido,
+            forçando uma troca desnecessária. Portanto, caso empatem no J (coluna), escolheremos o de i menor.'''
+            menor_i = 10000  # portanto, inicializamos com um valor alto, para garantir que será trocado.
+            for i, linha in enumerate(cls.matriz):
+                for j, alien in enumerate(linha):
+                    if alien:
+                        if j > maior_j:
+                            menor_i = i
+                            maior_j = j
+                        elif maior_j == j:  # desempate pelo mais acima, ou seja, menor i.
+                            if i < menor_i:
+                                menor_i = i
+            cls.rightmost_i = menor_i
+            cls.rightmost_j = maior_j
+            # cls.matriz[menor_i][maior_j].image = pygame.image.load('alienred.png').convert_alpha()
+        elif extremo == 2:  # downmost
+            # Achar o alien mais abaixo requer achar a linha de maior índice.
+            maior_i = -1  # portanto inicializamos negativo para garantir que será trocado.
+            '''preferencialmente, esse alien não estará ao meio, que estatisticamente tem mais chances de ser atingido,
+            forçando uma troca desnecessária. Portanto, caso empatem no i (coluna), escolheremos o de j maior.'''
+            maior_j = -1  # inicializamos negativo pelo mesmo motivo acima.
+            for i, linha in enumerate(cls.matriz):
+                for j, alien in enumerate(linha):
+                    if alien:
+                        if i > maior_i:
+                            maior_i = i
+                            maior_j = j
+                        elif i == maior_i:  # desempate dando prioridade ao mais à direita.
+                            if j > maior_j:
+                                maior_j = j
+            cls.downmost_i = maior_i
+            cls.downmost_j = maior_j
+            # cls.matriz[maior_i][maior_j].image = pygame.image.load('alienred.png').convert_alpha()
+
+        elif extremo == 8:  # upmost
+            # Achar o alien mais acima requer achar a linha de menor índice.
+            menor_i = 10000  # portanto, inicializamos com um valor alto para garantir que será mudado.
+            '''preferencialmente, esse alien não estará ao meio, que estatisticamente tem mais chances de ser atingido,
+            forçando uma troca desnecessária. Portanto, caso empatem no i (coluna), escolheremos o de j menor.'''
+            menor_j = 10000  # portanto, inicializamos com um valor alto para garantir que será mudado.
+            for i, linha in enumerate(cls.matriz):
+                for j, alien in enumerate(linha):
+                    if alien:
+                        if i < menor_i:
+                            menor_i = i
+                            menor_j = j
+                        elif menor_i == i:  # caso a altura/linha empate, preferimos o mais à esquerda.
+                            if j < menor_j:
+                                menor_j = j
+            cls.upmost_i = menor_i
+            cls.upmost_j = menor_j
+            # cls.matriz[menor_i][menor_j].image = pygame.image.load('alienred.png').convert_alpha()
 
     @classmethod
     def desenhar(cls):
         for linha in cls.matriz:
             for alien in linha:
-                alien.draw()
-
-    @classmethod
-    def tem_alien(cls):
-        for linha in cls.matriz:
-            if linha:
-                return True
-        return False
+                if alien:
+                    alien.draw()
 
     @classmethod
     def colisao_parede(cls, width, delta_time):
         for linha in cls.matriz:
             if linha:
-                primeiro_alien = linha[0]
-                ultimo_alien = linha[-1]
+                primeiro_alien = cls.matriz[cls.leftmost_i][cls.leftmost_j]
+                ultimo_alien = cls.matriz[cls.rightmost_i][cls.rightmost_j]
                 if primeiro_alien.x < 0 or ultimo_alien.x + ultimo_alien.width >= width:
                     cls.velx *= -1
                     cls.vely = primeiro_alien.height/2
@@ -83,23 +204,49 @@ class Enemy(Sprite):
     def mover(cls, delta_time, moverY: bool):
         for linha in cls.matriz:
             for alien in linha:
-                alien.x += cls.velx * delta_time
-                if moverY:
-                    alien.y += cls.vely
+                if alien:
+                    alien.x += cls.velx * delta_time
+                    if moverY:
+                        alien.y += cls.vely
 
     @classmethod
     def checar_hit(cls, lista_tiro):
+        if cls.qtdvivos <= 0:
+            return 10
+        # encurtando nomes de índices necessários
+        d_i = cls.downmost_i
+        d_j = cls.downmost_j
+        u_i = cls.upmost_i
+        u_j = cls.upmost_j
+        l_i = cls.leftmost_i
+        l_j = cls.leftmost_j
+        r_i = cls.rightmost_i
+        r_j = cls.rightmost_j
+        # encurtando variável das coordenadas necessárias
+        leftmost_x = cls.matriz[l_i][l_j].x
+        rightmost_x = cls.matriz[r_i][r_j].x
+        upmost_y = cls.matriz[u_i][u_j].y
+        downmost_y = cls.matriz[d_i][d_j].y
+        alien_distance_horizontal = cls.alien_width * 1.5
+        alien_distance_vertical = cls.alien_height * 1.5
+        # inicializando qtdhits
         qtdhits = 0
         for t, tiro in enumerate(lista_tiro):
-            for i, linha in enumerate(cls.matriz):
-                if linha:
-                    if tiro.y <= linha[0].y + linha[0].height and tiro.y + tiro.height >= linha[0].y:
-                        for j, alien in enumerate(linha):
-                            if lista_tiro and linha[j]:
-                                if tiro.collided(alien) and alien.get_curr_frame() != 2:
-                                    lista_tiro.pop(t)
-                                    alien.set_curr_frame(2)
-                                    qtdhits += 1
+            if tiro.x + tiro.width > leftmost_x and tiro.x < rightmost_x + alien_distance_horizontal \
+                    and tiro.y + tiro.height > upmost_y and tiro.y < downmost_y + alien_distance_vertical:
+                hit_j = int(l_j + (tiro.x - leftmost_x) // alien_distance_horizontal)
+                hit_i = int(u_i + (tiro.y - upmost_y) // alien_distance_vertical)
+                if hit_i == 4:
+                    hit_i = 3
+                if hit_j == 12:
+                    hit_j = 11
+                # print(hit_i, hit_j)
+                alien = cls.matriz[hit_i][hit_j]
+                if alien:
+                    # print(f'X do tiro: {tiro.x}, X do alien: {alien.x}, índice i: {hit_i}, X do leftmost: {leftmost_x}')
+                    alien.set_curr_frame(2)
+                    lista_tiro.pop(t)
+                    qtdhits += 1
         return qtdhits
 
 
@@ -112,7 +259,7 @@ class Player(Sprite):
         self.y = y
         if dificuldade == 'Fácil':
             self.velX = 600
-            self.tiros_delay = 0.15
+            self.tiros_delay = 0.001
         elif dificuldade == 'Médio':
             self.velX = 450
             self.tiros_delay = 0.25

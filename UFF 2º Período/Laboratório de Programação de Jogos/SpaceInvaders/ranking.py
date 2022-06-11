@@ -1,6 +1,7 @@
 class Ranking:
     caminho_ranking = "ranking.txt"
     caminho_sprite = "MenuInicial/Botao Grande Vazio.png"
+    caminho_scroll = "MenuInicial/scrollbar.png"
 
     def __init__(self, janela):
         from PPlay.sprite import Sprite
@@ -11,8 +12,9 @@ class Ranking:
         self.drawfinished = False
         self.janela = janela
         self.fonte = Font(f'{getcwd()}\FreePixel.ttf', 30)
+        self.scroll = Sprite(self.caminho_scroll)
         self.paralelogramo = Sprite(self.caminho_sprite)
-        self.paralelogramo.xoriginal = 0 - self.paralelogramo.width
+        self.paralelogramo.xoriginal = 0 - self.paralelogramo.width - self.scroll.width - 5
         self.paralelogramo.set_position(self.paralelogramo.xoriginal, 4)
         if not exists(self.caminho_ranking):
             arquivo = open(self.caminho_ranking, "w")
@@ -21,6 +23,8 @@ class Ranking:
         self.RAMrank = [linha for i, linha in enumerate(arquivo) if i <= 10]
         arquivo.close()
         self.qtdparalelogramos = self.janela.height // (self.paralelogramo.height + 4)
+        self.inicio = 0
+        self.scroll_cronometro = 0
 
     def saverank(self):
         self.RAMrank.sort(key=lambda l: int(l.split("|")[0]), reverse=True)
@@ -44,10 +48,12 @@ class Ranking:
 
     def animacao(self, direcao):
         velX = self.paralelogramo.width * 2 * direcao
-        cabecalho = '  NOME:           | SCORE:     | DIFICULDADE:'
+
         for i in range(self.qtdparalelogramos):
             self.paralelogramo.draw()
-            if i < len(self.RAMrank):
+            i += self.inicio
+
+            if 0 <= i < len(self.RAMrank):
                 rank = self.RAMrank[i].rstrip().split('|')
                 texto = f'{i+1}º Lugar | Pontos: {rank[0]:5}| Dificuldade: {rank[2]:7}'
                 texto2 = f'Nome: {rank[1]}'
@@ -58,7 +64,9 @@ class Ranking:
 
             self.paralelogramo.y += self.paralelogramo.height + 4
         self.paralelogramo.y = 4
-
+        self.scroll.x = self.paralelogramo.x + self.paralelogramo.width + 5
+        self.scroll.y = self.paralelogramo.y + 10
+        self.scroll.draw()
         # mover paralelogramos para a direita
         if direcao > 0:
             if self.paralelogramo.x < self.janela.width / 25:  # se n tiver terminado

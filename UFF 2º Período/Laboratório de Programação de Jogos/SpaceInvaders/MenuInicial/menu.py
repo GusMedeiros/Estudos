@@ -1,7 +1,7 @@
 from PPlay.sprite import Sprite
 from PPlay.gameimage import GameImage
-from SpaceInvaders.ranking import Ranking
-from SpaceInvaders.Debug import Debug
+from ranking import Ranking
+from Debug import Debug
 
 class Menu:
     caminhosprites = 'MenuInicial/'
