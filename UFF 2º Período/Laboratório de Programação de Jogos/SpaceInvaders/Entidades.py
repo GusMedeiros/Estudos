@@ -13,8 +13,8 @@ class Enemy(Sprite):
     downmost_j = 0
     alien_width = 62
     alien_height = 46
-    qtdcolunas = int
-    qtdlinhas = int
+    qtdcolunas = 0
+    qtdlinhas = 0
     caminho_sprite = 'alien.png'
     tempo_acumulado_frames = 0
     velx = 100
@@ -247,10 +247,12 @@ class Enemy(Sprite):
                         alien = cls.matriz[hit_i][j]
                     if alien:
                         if tiro.collided(alien):
-                            print(f'X do tiro: {tiro.x}, X do alien: {alien.x}, índice i: {hit_i}, X do leftmost: {leftmost_x}')
+                            print(f'X do tiro: {tiro.x}, X do alien: {alien.x}, índice i: {hit_i},'
+                                  f' X do leftmost: {leftmost_x}')
                             alien.set_curr_frame(2)
                             lista_tiro.pop(t)
                             qtdhits += 1
+                            break
         return qtdhits
 
 
@@ -263,7 +265,7 @@ class Player(Sprite):
         self.y = y
         if dificuldade == 'Fácil':
             self.velX = 600
-            self.tiros_delay = 0.001
+            self.tiros_delay = 0.00001
         elif dificuldade == 'Médio':
             self.velX = 450
             self.tiros_delay = 0.25
