@@ -1,5 +1,6 @@
 from PPlay.sprite import Sprite
 
+
 class Enemy(Sprite):
     matriz = []
     leftmost_i = 0
@@ -12,10 +13,10 @@ class Enemy(Sprite):
     downmost_j = 0
     alien_width = 62
     alien_height = 46
+    qtdcolunas = int
+    qtdlinhas = int
     caminho_sprite = 'alien.png'
     tempo_acumulado_frames = 0
-    tempo_acumulado_mover = 0
-    colisao = False
     velx = 100
     vely = 0
     qtdvivos = 0
@@ -48,6 +49,8 @@ class Enemy(Sprite):
 
     @classmethod
     def spawn(cls, dificuldade, colunas, linhas):
+        cls.qtdcolunas = colunas
+        cls.qtdlinhas = linhas
         cls.downmost_i = linhas - 1
         cls.rightmost_j = colunas - 1
         cls.qtdvivos = colunas * linhas
@@ -99,7 +102,6 @@ class Enemy(Sprite):
 
     @classmethod
     def substituir_extremo(cls, extremo: int):
-        import pygame
         """Função que deve ser chamada quando um alien de referência morrer, para substituí-lo.
         O parâmetro extremo indica qual extremo deseja substituir.
         Ele é análogo ao teclado numérico: 4 é o leftmost, 6 rightmost, 8 upmost, 2 downmost."""
@@ -230,23 +232,25 @@ class Enemy(Sprite):
         alien_distance_vertical = cls.alien_height * 1.5
         # inicializando qtdhits
         qtdhits = 0
+        hit_j = []
         for t, tiro in enumerate(lista_tiro):
             if tiro.x + tiro.width > leftmost_x and tiro.x < rightmost_x + alien_distance_horizontal \
                     and tiro.y + tiro.height > upmost_y and tiro.y < downmost_y + alien_distance_vertical:
-                hit_j = int(l_j + abs(tiro.x - leftmost_x) // alien_distance_horizontal)
+                hit_j.append(int(l_j + abs(tiro.x - leftmost_x) // alien_distance_horizontal))
+                hit_j.append(int(l_j + abs(tiro.x + tiro.width - leftmost_x) // alien_distance_horizontal))
                 hit_i = int(u_i + abs(tiro.y - upmost_y) // alien_distance_vertical)
-                # print('a', alien_distance_horizontal, (tiro.x - leftmost_x) // alien_distance_horizontal)
-                '''if hit_i == 4:
-                    hit_i = 3
-                if hit_j == 12:
-                    hit_j = 11'''
-                print(hit_i, hit_j)
-                alien = cls.matriz[hit_i][hit_j]
-                if alien:
-                    print(f'X do tiro: {tiro.x}, X do alien: {alien.x}, índice i: {hit_i}, X do leftmost: {leftmost_x}')
-                    alien.set_curr_frame(2)
-                    lista_tiro.pop(t)
-                    qtdhits += 1
+                if hit_i >= cls.qtdlinhas:
+                    continue
+                for j in hit_j:
+                    alien = None
+                    if j < cls.qtdcolunas:
+                        alien = cls.matriz[hit_i][j]
+                    if alien:
+                        if tiro.collided(alien):
+                            print(f'X do tiro: {tiro.x}, X do alien: {alien.x}, índice i: {hit_i}, X do leftmost: {leftmost_x}')
+                            alien.set_curr_frame(2)
+                            lista_tiro.pop(t)
+                            qtdhits += 1
         return qtdhits
 
 
