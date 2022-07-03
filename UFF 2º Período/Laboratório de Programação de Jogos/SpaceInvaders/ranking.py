@@ -11,7 +11,7 @@ class Ranking:
         self.drawstate = False
         self.drawfinished = False
         self.janela = janela
-        self.fonte = Font(f'{getcwd()}\FreePixel.ttf', 30)
+        self.fonte = Font(f'{getcwd()}\\FreePixel.ttf', 30)
         self.scroll = Sprite(self.caminho_scroll)
         self.paralelogramo = Sprite(self.caminho_sprite)
         self.paralelogramo.xoriginal = 0 - self.paralelogramo.width - self.scroll.width - 5
@@ -32,7 +32,6 @@ class Ranking:
         from os import remove, rename
         arquivo_temp = open(self.caminho_ranking + "temp", "w", encoding="utf-8")
         for i, linha in enumerate(self.RAMrank):
-            print([linha.rstrip()])
             arquivo_temp.write(linha.rstrip())
             if i != len(self.RAMrank) - 1:  # se nao for o ultimo elemento, pula linha.
                 arquivo_temp.write("\n")
@@ -43,8 +42,6 @@ class Ranking:
     def updaterank(self, score, nome, dificuldade):
         self.RAMrank.append(f"{score}|{nome}|{dificuldade}")
         self.RAMrank.sort(key=lambda x: x.split("|")[0])
-        for elem in self.RAMrank:
-            print(elem + 'a')
 
     def animacao(self, direcao):
         velX = self.paralelogramo.width * 2 * direcao

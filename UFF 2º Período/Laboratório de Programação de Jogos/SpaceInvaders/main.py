@@ -1,11 +1,9 @@
 from MenuInicial.menu import Menu
 from PPlay.window import Window
-from PPlay.sprite import Sprite
 from PPlay.gameimage import GameImage
 from Entidades import Player, Tiro, Enemy
 from Debug import Debug
 from ranking import Ranking
-import pygame
 # variáveis de jogo
 janela = Window(1366, 768)
 mouse = janela.get_mouse()
@@ -24,17 +22,17 @@ while True:
     else:
         rodando = True
 
-    if rodando:
-        player = Player(dificuldade)
-        player.set_position(janela.width / 2 - player.width / 2, janela.height - player.height)
-        Tiro.lista = []
-        reload_timecounter = player.tiros_delay
-        esc_pressed_past = False
-        Enemy.reset()
-        Enemy.spawn(dificuldade, 12, 4)
-        score = 0
-        nome_jogador = menu.pedir_nome(debug)
-        f3_pressed_past = False
+    player = Player(dificuldade, janela)
+    player.set_position(janela.width / 2 - player.width / 2, janela.height - player.height)
+    Tiro.tiros_player = []
+    reload_timecounter = player.tiros_delay
+    esc_pressed_past = False
+    Enemy.reset()
+    Enemy.spawn(dificuldade, 12, 10)
+    Enemy.set_difficulty(dificuldade)
+    score = 0
+    nome_jogador = menu.pedir_nome(debug)
+    f3_pressed_past = False
 
     while rodando:
         janela.update()
@@ -71,28 +69,35 @@ while True:
                 player.x = janela.width - player.width
         if teclado.key_pressed('space'):
             if reload_timecounter >= player.tiros_delay:
-                Tiro(Sprite('tiro.png'), player.x + player.width/2, player.y)
+                Tiro(1, player.x + player.width / 2, player.y)
                 reload_timecounter = 0
         f3_pressed_past = teclado.key_pressed('f3')
 
         # updates:
         reload_timecounter += janela.delta_time()
-        score += Enemy.checar_hit(Tiro.lista)
-        # print(Enemy.qtdvivos)
+        score += Enemy.checar_hit(Tiro.tiros_player)
+        player.checar_hit(Tiro.tiros_enemy)
+        player.update_invulnerabilidade()
         if Enemy.qtdvivos == 0:
+            Enemy.proxima_fase(dificuldade)
+
+        if Enemy.isgameover(player):
             ranking.updaterank(score, nome_jogador, dificuldade)
             ranking.saverank()
             ranking = Ranking(janela)
             menu.ranking = ranking
+            menu.gameover(score)
             break
-
-        # draws
-        # print(ranking.RAMrank , '\n\n')
-        fundojogo.draw()
         Enemy.colisao_parede(janela.width, janela.delta_time())
+        # draws
+        fundojogo.draw()
         Enemy.desenhar_e_update(janela.delta_time())
-        Tiro.update_and_draw(janela, ranking)
-        # janela.draw_text(str(score))
+        Tiro.clear_and_draw(janela)
+        janela.draw_text(f'Score:{score}', janela.width * 1/12, janela.height * 1/12, size=45,
+                         color=(255, 255, 255), font=menu.ranking.fonte)
+        janela.draw_text(f'Fase atual:{Enemy.fase_atual}/{Enemy.fase_maxima}', janela.width * 1 / 12, janela.height * 1.6 / 12, size=45,
+                         color=(255, 255, 255), font=menu.ranking.fonte)
+        player.drawvidas()
         player.draw()
         # debug draws
         if debug:

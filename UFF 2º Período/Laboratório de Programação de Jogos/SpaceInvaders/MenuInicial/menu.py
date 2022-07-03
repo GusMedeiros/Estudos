@@ -1,6 +1,8 @@
 from PPlay.sprite import Sprite
 from PPlay.gameimage import GameImage
 from ranking import Ranking
+from pygame.font import Font
+from os import getcwd
 from Debug import Debug
 
 class Menu:
@@ -21,9 +23,11 @@ class Menu:
         self.botao_sair = Sprite(f'{self.caminhosprites}botaosair.png', 2)
         self.botao_retornar = Sprite(f'{self.caminhosprites}botaoretornar.png', 2)
         self.botao_menu_principal = Sprite(f'{self.caminhosprites}botaomenuprincipal.png', 2)
+        self.fontegameover = Font(f'{getcwd()}\\FreePixel.ttf', 60)
+        self.fonte = Font(f'{getcwd()}\\FreePixel.ttf', 30)
+        self.fundo = GameImage(f'{self.caminhosprites}espaco.jpg')
 
     def menuinicial(self, debug=None):
-        fundo = GameImage(f'{self.caminhosprites}espaco.jpg')
         # mouse
         self.mousesprite.set_position(self.janela.width / 2 - self.mousesprite.width / 2,
                                       self.janela.height / 2 - self.mousesprite.height / 2)
@@ -90,7 +94,7 @@ class Menu:
             # updates
             self.janela.update()
             # draws
-            fundo.draw()
+            self.fundo.draw()
             self.botao_jogar.draw()
             botaodificuldade.draw()
             self.janela.draw_text(dificuldade, botaodificuldade.x + 20,
@@ -189,3 +193,33 @@ class Menu:
             if debug:
                 debug.show_fps_if_debug()
         return nome
+
+    def gameover(self, scorefinal):
+        self.botao_sair.x = self.janela.width/2 - self.botao_sair.width/2
+        self.botao_sair.y = self.janela.height/2 + self.botao_sair.height
+        self.mousehitbox.set_position(self.mouse.get_position()[0], self.mouse.get_position()[1])
+        self.mousesprite.set_position(self.mousehitbox.x, self.mousehitbox.y)
+        mb1click = mb1click2 = False
+        while True:
+            self.janela.update()
+            self.fundo.draw()
+            self.janela.draw_text("GAME OVER!!", self.botao_sair.x, self.botao_sair.y - self.botao_sair.height,
+                                  color=(0, 246, 245), font=self.fontegameover, bold=True)
+            self.janela.draw_text(f"Score Final: {scorefinal}", self.botao_sair.x,
+                                  self.botao_sair.y - self.botao_sair.height/2,
+                                  color=(0, 246, 245), font=self.fonte)
+            self.botao_sair.draw()
+            self.mousesprite.draw()
+
+            self.mousehitbox.set_position(self.mouse.get_position()[0], self.mouse.get_position()[1])
+            self.mousesprite.set_position(self.mousehitbox.x, self.mousehitbox.y)
+
+            mb1click = self.mouse.is_button_pressed(1)
+            if self.mousehitbox.collided(self.botao_sair):
+                self.botao_sair.set_curr_frame(1)
+                if not mb1click and mb1click2:
+                    # animacaosair()?
+                    return "Sair"
+            else:
+                self.botao_sair.set_curr_frame(0)
+            mb1click2 = self.mouse.is_button_pressed(1)

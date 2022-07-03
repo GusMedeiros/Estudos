@@ -1,3 +1,6 @@
+from os import getcwd
+from random import randint
+
 from PPlay.sprite import Sprite
 
 
@@ -15,15 +18,20 @@ class Enemy(Sprite):
     alien_height = 46
     qtdcolunas = 0
     qtdlinhas = 0
-    caminho_sprite = 'alien.png'
+    caminho_sprite = f'{getcwd()}\\alien.png'
     tempo_acumulado_frames = 0
     velx = 100
     vely = 0
     qtdvivos = 0
+    fase_atual = 0
+    fase_maxima = 4
+    reload_cooldown = {"Fácil": 8,
+                       "Médio": 6,
+                       "Difícil": 4}
 
     def __init__(self, dificuldade, x=0, y=0):
         super().__init__(self.caminho_sprite, 3)
-
+        self.reload_timer = 0
         self.x = x
         self.y = y
 
@@ -40,28 +48,70 @@ class Enemy(Sprite):
         cls.downmost_j = 0
         cls.alien_width = 62
         cls.alien_height = 46
-        cls.caminho_sprite = 'alien.png'
+        cls.qtdcolunas = 0
+        cls.qtdlinhas = 0
+        cls.caminho_sprite = f'{getcwd()}\\alien.png'
         cls.tempo_acumulado_frames = 0
-        cls.tempo_acumulado_mover = 0
-        cls.colisao = False
         cls.velx = 100
         cls.vely = 0
+        cls.qtdvivos = 0
+        cls.fase_atual = 0
+        cls.fase_maxima = 4
 
     @classmethod
-    def spawn(cls, dificuldade, colunas, linhas):
+    def set_difficulty(cls, dificuldade: str):
+        if dificuldade == "Fácil":
+            cls.velx = 80
+        elif dificuldade == "Médio":
+            cls.velx = 100
+        else:
+            cls.velx = 125
+
+    @classmethod
+    def isgameover(cls, player):
+        alien_mais_abaixo = cls.matriz[cls.downmost_i][cls.downmost_j]
+        if player.vidas == 0 or cls.fase_atual == cls.fase_maxima \
+                or alien_mais_abaixo.y + alien_mais_abaixo.height >= player.y:
+            return True
+        return False
+
+    @classmethod
+    def proxima_fase(cls, dificuldade: str):
+        cls.velx *= 1.2
+        cls.spawn(dificuldade, cls.qtdcolunas, cls.qtdlinhas, respawn=True)
+        cls.reload_cooldown[dificuldade] *= 0.8
+        cls.fase_atual += 1
+
+    @classmethod
+    def spawn(cls, dificuldade, colunas, linhas, respawn=False):
         cls.qtdcolunas = colunas
         cls.qtdlinhas = linhas
+        cls.upmost_i = cls.rightmost_i = cls.leftmost_i = cls.upmost_j = cls.downmost_j = cls.leftmost_j = 0
         cls.downmost_i = linhas - 1
         cls.rightmost_j = colunas - 1
+
         cls.qtdvivos = colunas * linhas
         from random import randint
         for i in range(linhas):
-            cls.matriz.append([])
+            if respawn is False:
+                cls.matriz.append([])
             for j in range(colunas):
                 alien = Enemy(dificuldade)
                 alien.set_position(j * alien.width * 1.5, i * alien.height * 1.5)
                 alien.set_curr_frame(randint(0, 1))
-                cls.matriz[i].append(alien)
+                if respawn is False:
+                    cls.matriz[i].append(alien)
+                else:
+                    cls.matriz[i][j] = alien
+
+    def atirar(self, delta_time):
+        deve_atirar = randint(1, 7) == 1
+        if self.reload_timer >= 8:
+            self.reload_timer = 0
+            if deve_atirar:
+                Tiro(-1, self.x + self.width / 2, self.y)
+        else:
+            self.reload_timer += delta_time
 
     @classmethod
     def desenhar_e_update(cls, delta_time):
@@ -72,30 +122,23 @@ class Enemy(Sprite):
                     alien.x += cls.velx * delta_time
                     alien.y += cls.vely
                     alien.draw()
+                    if alien.get_curr_frame() != 2:
+                        alien.atirar(delta_time)
                     if cls.tempo_acumulado_frames > 0.5:
                         if alien.get_curr_frame() != 2:
                             alien.set_curr_frame((alien.get_curr_frame() + 1) % 2)
                         else:
                             linha[j] = False
                             cls.qtdvivos -= 1
-                            '''print(f'matei o {i},{j}')'''
                             if alien:
                                 if i == cls.leftmost_i and j == cls.leftmost_j:
                                     cls.substituir_extremo(4)
-                                    '''print("Troquei o leftmost")
-                                    print(cls.leftmost_i, cls.leftmost_j)'''
                                 if i == cls.rightmost_i and j == cls.rightmost_j:
                                     cls.substituir_extremo(6)
-                                    '''print("Troquei o rightmost")
-                                    print(cls.rightmost_i, cls.rightmost_j)'''
                                 if i == cls.downmost_i and j == cls.downmost_j:
                                     cls.substituir_extremo(2)
-                                    '''print("Troquei o downmost")
-                                    print(cls.downmost_i, cls.downmost_j)'''
                                 if i == cls.upmost_i and j == cls.upmost_j:
                                     cls.substituir_extremo(8)
-                                    '''print("Troquei o upmost")
-                                    print(cls.upmost_i, cls.upmost_j)'''
 
         if cls.tempo_acumulado_frames > 0.5:
             cls.tempo_acumulado_frames = 0
@@ -105,13 +148,19 @@ class Enemy(Sprite):
         """Função que deve ser chamada quando um alien de referência morrer, para substituí-lo.
         O parâmetro extremo indica qual extremo deseja substituir.
         Ele é análogo ao teclado numérico: 4 é o leftmost, 6 rightmost, 8 upmost, 2 downmost."""
-
-        if extremo == 4:  # leftmost
+        if cls.qtdvivos == 1:
+            for i, linha in enumerate(cls.matriz):
+                for j, alien in enumerate(linha):
+                    if alien:
+                        cls.rightmost_i = cls.leftmost_i = cls.downmost_i = cls.upmost_i = i
+                        cls.rightmost_j = cls.leftmost_j = cls.downmost_j = cls.upmost_j = j
+        elif extremo == \
+                4:  # leftmost
             # Achar o alien mais à esquerda requer achar a coluna de menor índice.
             menor_j = 10000  # portanto, inicializamos com um valor alto, para garantir que será trocado.
             '''preferencialmente, esse alien não estará embaixo, que estatisticamente tem mais chances de ser atingido,
             forçando uma troca desnecessária. Portanto, caso empatem no J (coluna), escolheremos o de i menor.'''
-            menor_i = 10000 # portanto, inicializamos com um valor alto, para garantir que será trocado.
+            menor_i = 10000  # portanto, inicializamos com um valor alto, para garantir que será trocado.
             for i, linha in enumerate(cls.matriz):
                 for j, alien in enumerate(linha):
                     if alien:
@@ -196,7 +245,7 @@ class Enemy(Sprite):
                 ultimo_alien = cls.matriz[cls.rightmost_i][cls.rightmost_j]
                 if primeiro_alien.x < 0 or ultimo_alien.x + ultimo_alien.width >= width:
                     cls.velx *= -1
-                    cls.vely = primeiro_alien.height/2
+                    cls.vely = primeiro_alien.height / 2
                     cls.mover(delta_time, False)
                     return
         cls.vely = 0
@@ -247,53 +296,102 @@ class Enemy(Sprite):
                         alien = cls.matriz[hit_i][j]
                     if alien:
                         if tiro.collided(alien):
-                            print(f'X do tiro: {tiro.x}, X do alien: {alien.x}, índice i: {hit_i},'
-                                  f' X do leftmost: {leftmost_x}')
+                            if alien.get_curr_frame() != 2:
+                                qtdhits += 1
                             alien.set_curr_frame(2)
                             lista_tiro.pop(t)
-                            qtdhits += 1
                             break
         return qtdhits
 
 
 class Player(Sprite):
-    caminho_sprite = 'Player.png'
+    caminho_sprite = f'{getcwd()}\\Player.png'
+    caminho_sprite_vidas = f'{getcwd()}\\vidas.png'
 
-    def __init__(self, dificuldade, x=0, y=0):
-        super().__init__(self.caminho_sprite)
+    def __init__(self, dificuldade, janela, x=0, y=0, vidas=3):
+        super().__init__(self.caminho_sprite, 2)
+        self.janela = janela
         self.x = x
         self.y = y
+        self.vidas_sprite = Sprite(self.caminho_sprite_vidas, 4)
+        self.vidas_sprite.set_position(janela.width - self.vidas_sprite.width * 1.5,
+                                       janela.height - self.height * 2)
+        self.vidas = vidas
+        self.invulnerability_timer = 0
         if dificuldade == 'Fácil':
             self.velX = 600
-            self.tiros_delay = 0.00001
+            self.tiros_delay = 0.4
         elif dificuldade == 'Médio':
             self.velX = 450
-            self.tiros_delay = 0.25
+            self.tiros_delay = 0.6
         else:
             self.velX = 300
-            self.tiros_delay = 0.5
+            self.tiros_delay = 0.8
+
+    def checar_hit(self, lista_tiro):
+        for i, tiro in enumerate(lista_tiro):
+            if tiro.collided(self):
+                lista_tiro.pop(i)
+                if self.invulnerability_timer > 2:
+                    self.vidas -= 1
+                    self.x = self.janela.width / 2 - self.width / 2
+                    self.invulnerability_timer = 0
+
+    def update_invulnerabilidade(self):
+        self.invulnerability_timer += self.janela.delta_time()
+        timer_times10 = self.invulnerability_timer * 10
+        if self.invulnerability_timer <= 2 and int(timer_times10) % 2 == 0:
+            self.set_curr_frame(1)
+        else:
+            self.set_curr_frame(0)
+
+    def drawvidas(self):
+        self.vidas_sprite.set_curr_frame(self.vidas)
+        self.vidas_sprite.draw()
 
 
 class Tiro:
-    lista = []
-    velY = 600
+    caminho_sprite = f'{getcwd()}\\tiro.png'
+    tiros_player = []
+    tiros_enemy = []
+    velY_tiro_player = 600
+    velY_tiro_enemy = -250
+    timer_frame = 0
 
-    def __init__(self, sprite, mid_x_player, y_player):
-        self.sprite = sprite
-        self.sprite.x = mid_x_player - sprite.width/2
-        self.sprite.y = y_player - self.sprite.height
-        self.lista.append(sprite)
+    def __init__(self, direction: int, mid_x, shooter_y):
+        self.sprite = Sprite(self.caminho_sprite, 6)
+        self.sprite.x = mid_x - self.sprite.width / 2
+        if direction > 0:
+            self.sprite.y = shooter_y - self.sprite.height
+            self.tiros_player.append(self.sprite)
+        else:
+            self.sprite.y = shooter_y + self.sprite.height
+            self.tiros_enemy.append(self.sprite)
 
     @classmethod
-    def update_and_draw(cls, janela, ranking):
-        for tiro in cls.lista:
-            tiro.y -= cls.velY * janela.delta_time()
+    def clear_and_draw(cls, janela):
+        cls.timer_frame += janela.delta_time()
+        for i, tiro in enumerate(cls.tiros_player):
+            tiro.y -= cls.velY_tiro_player * janela.delta_time()
             if tiro.y + tiro.height <= 0:
-                cls.lista.remove(tiro)
+                cls.tiros_player.pop(i)
             else:
                 tiro.draw()
+                if cls.timer_frame >= 0.15:
+                    tiro.set_curr_frame((tiro.get_curr_frame() + 1) % 6)
+        for i, tiro in enumerate(cls.tiros_enemy):
+            tiro.y -= cls.velY_tiro_enemy * janela.delta_time()
+            if tiro.y >= janela.height:
+                cls.tiros_enemy.pop(i)
+            else:
+                tiro.draw()
+                if cls.timer_frame >= 0.15:
+                    tiro.set_curr_frame((tiro.get_curr_frame() + 1) % 6)
+        cls.timer_frame = 0 if cls.timer_frame >= 0.15 else cls.timer_frame
 
     @classmethod
     def draw(cls):
-        for tiro in cls.lista:
+        for tiro in cls.tiros_player:
+            tiro.draw()
+        for tiro in cls.tiros_enemy:
             tiro.draw()
