@@ -154,7 +154,6 @@ class Menu:
         return False  # se chegou até aqui, jogando deve continuar falso.
 
     def pedir_nome(self, debug=None):
-        import pygame
         nome = ''
         backspace_cronometro = 0
         campo_nome = Sprite(f'{self.caminhosprites}botaopequenovazio.png', 2)

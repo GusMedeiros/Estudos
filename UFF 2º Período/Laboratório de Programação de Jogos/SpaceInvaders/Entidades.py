@@ -5,6 +5,8 @@ from PPlay.sprite import Sprite
 
 
 class Enemy(Sprite):
+    boss = None
+    vidas_boss = 3
     matriz = []
     leftmost_i = 0
     leftmost_j = 0
@@ -19,6 +21,7 @@ class Enemy(Sprite):
     qtdcolunas = 0
     qtdlinhas = 0
     caminho_sprite = f'{getcwd()}\\alien.png'
+    caminho_sprite_boss = f'{getcwd()}\\alienred.png'
     tempo_acumulado_frames = 0
     velx = 100
     vely = 0
@@ -29,15 +32,21 @@ class Enemy(Sprite):
                        "Médio": 6,
                        "Difícil": 4}
 
-    def __init__(self, dificuldade, x=0, y=0):
-        super().__init__(self.caminho_sprite, 3)
+    def __init__(self, dificuldade, x=0, y=0, force_boss=False):
+        if force_boss:  # 5% de chance de spawnar o boss
+            super().__init__(self.caminho_sprite_boss, 3)
+            Enemy.boss = self
+        else:
+            super().__init__(self.caminho_sprite, 3)
         self.reload_timer = 0
         self.x = x
         self.y = y
 
     @classmethod
     def reset(cls):
+        cls.boss = None
         cls.matriz = []
+        cls.vidas_boss = 3
         cls.leftmost_i = 0
         cls.leftmost_j = 0
         cls.rightmost_i = 0
@@ -51,6 +60,7 @@ class Enemy(Sprite):
         cls.qtdcolunas = 0
         cls.qtdlinhas = 0
         cls.caminho_sprite = f'{getcwd()}\\alien.png'
+        cls.caminho_sprite_boss = f'{getcwd()}\\alienred.png'
         cls.tempo_acumulado_frames = 0
         cls.velx = 100
         cls.vely = 0
@@ -65,7 +75,7 @@ class Enemy(Sprite):
         elif dificuldade == "Médio":
             cls.velx = 100
         else:
-            cls.velx = 125
+            cls.velx = 200
 
     @classmethod
     def isgameover(cls, player):
@@ -78,6 +88,8 @@ class Enemy(Sprite):
     @classmethod
     def proxima_fase(cls, dificuldade: str):
         cls.velx *= 1.2
+        cls.boss = None
+        cls.vidas_boss = 3
         cls.spawn(dificuldade, cls.qtdcolunas, cls.qtdlinhas, respawn=True)
         cls.reload_cooldown[dificuldade] *= 0.8
         cls.fase_atual += 1
@@ -89,14 +101,17 @@ class Enemy(Sprite):
         cls.upmost_i = cls.rightmost_i = cls.leftmost_i = cls.upmost_j = cls.downmost_j = cls.leftmost_j = 0
         cls.downmost_i = linhas - 1
         cls.rightmost_j = colunas - 1
-
         cls.qtdvivos = colunas * linhas
         from random import randint
         for i in range(linhas):
             if respawn is False:
                 cls.matriz.append([])
             for j in range(colunas):
-                alien = Enemy(dificuldade)
+                if i == linhas - 1 and j == colunas - 1 and cls.boss is None:
+                    alien = Enemy(dificuldade, force_boss=True)
+                    # /\ se por azar é o último alien e o boss não nasceu, forçamos a nascer agora.
+                else:
+                    alien = Enemy(dificuldade)
                 alien.set_position(j * alien.width * 1.5, i * alien.height * 1.5)
                 alien.set_curr_frame(randint(0, 1))
                 if respawn is False:
@@ -239,8 +254,10 @@ class Enemy(Sprite):
 
     @classmethod
     def colisao_parede(cls, width, delta_time):
-        for linha in cls.matriz:
+        for i, linha in enumerate(cls.matriz):
             if linha:
+                if cls.leftmost_i >= len(cls.matriz) or cls.leftmost_j >= len(cls.matriz[i]):
+                    print(linha)
                 primeiro_alien = cls.matriz[cls.leftmost_i][cls.leftmost_j]
                 ultimo_alien = cls.matriz[cls.rightmost_i][cls.rightmost_j]
                 if primeiro_alien.x < 0 or ultimo_alien.x + ultimo_alien.width >= width:
@@ -295,10 +312,14 @@ class Enemy(Sprite):
                     if j < cls.qtdcolunas:
                         alien = cls.matriz[hit_i][j]
                     if alien:
-                        if tiro.collided(alien):
-                            if alien.get_curr_frame() != 2:
-                                qtdhits += 1
-                            alien.set_curr_frame(2)
+                        if tiro.collided(alien) and alien.get_curr_frame() != 2:
+                            qtdhits += 1
+                            if alien is cls.boss and cls.vidas_boss > 0:
+                                cls.vidas_boss -= 1
+                                if cls.vidas_boss == 0:
+                                    alien.set_curr_frame(2)
+                            else:
+                                alien.set_curr_frame(2)
                             lista_tiro.pop(t)
                             break
         return qtdhits

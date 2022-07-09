@@ -1,12 +1,4 @@
-3000|CARLOS|Difícil
-3000|GUSTAVO|Difícil
-211|SDF|Difícil
-58|ASDF|Difícil
-58|SDF|Difícil
-48|PEDRO|Difícil
-20|ASDF|Difícil
-11|DSF|Difícil
-3|ADSF|Difícil
-2|ASDF|Difícil
-0|DFS|Difícil
-15|ADSF|Fácil
+195|GUSTAVO|Difícil
+1|SADF|Difícil
+232|RALOMJ|Médio
+67|SDF|Fácil

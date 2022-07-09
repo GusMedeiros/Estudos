@@ -28,7 +28,7 @@ while True:
     reload_timecounter = player.tiros_delay
     esc_pressed_past = False
     Enemy.reset()
-    Enemy.spawn(dificuldade, 12, 10)
+    Enemy.spawn(dificuldade, 2, 4)
     Enemy.set_difficulty(dificuldade)
     score = 0
     nome_jogador = menu.pedir_nome(debug)
@@ -93,7 +93,7 @@ while True:
         fundojogo.draw()
         Enemy.desenhar_e_update(janela.delta_time())
         Tiro.clear_and_draw(janela)
-        janela.draw_text(f'Score:{score}', janela.width * 1/12, janela.height * 1/12, size=45,
+        janela.draw_text(f'Score:{score}, vidas do boss: {Enemy.vidas_boss}', janela.width * 1/12, janela.height * 1/12, size=45,
                          color=(255, 255, 255), font=menu.ranking.fonte)
         janela.draw_text(f'Fase atual:{Enemy.fase_atual}/{Enemy.fase_maxima}', janela.width * 1 / 12, janela.height * 1.6 / 12, size=45,
                          color=(255, 255, 255), font=menu.ranking.fonte)
