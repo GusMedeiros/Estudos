@@ -1,2 +1,1 @@
-# Estudos
-Tudo que eu aprendi ou estou aprendendo desde 2021 está aqui (ou pelo menos deveria)
+Alguns arquivos de exercícios e aprendizados da faculdade entre 2021 semestre 2 e 2022 semestre 1
